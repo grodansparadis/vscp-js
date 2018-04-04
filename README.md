@@ -11,9 +11,9 @@ The communication to the VSCP daemon takes place via websocket and REST.
 ## How to use them?
 
 First bind this repository as git submodule to your own one.
-* Create a directory in your project, e.g. ```js/vscp-js/```
-* Add it: ```git submodule add https://github.com/grodansparadis/vscp-js.git js/vscp-js```
-* The previous step will create a ```.gitmodules``` file, which contains the submodule informations. Add it to your repository.
+* Add it e.g. to the existing folder ```js``` via ```git submodule add https://github.com/grodansparadis/vscp-js.git js/vscp-js```, which will create the subfolder ```vscp-js``` and clones the repository there.
+* The previous step will create an additional file, called ```.gitmodules```, which contains the submodule informations.
+* Commit the changes now to your repository.
 
 ### Websocket interface
 
