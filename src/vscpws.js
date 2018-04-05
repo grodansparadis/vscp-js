@@ -54,7 +54,7 @@ vscp._createNS("vscp.ws");
  * VSCP websocket client, used for connection establishment to a VSCP server.
  * @class
  */
-vscp.ws.Connection = function() {
+vscp.ws.Client = function() {
 
     /** States of the VSCP websocket
      * @enum {number}
@@ -930,7 +930,7 @@ vscp.ws.Connection = function() {
  * This function is called by the websocket in case the connection is established.
  * It will initiate the authentication with the VSCP server.
  */
-vscp.ws.Connection.prototype.onWebSocketOpen = function() {
+vscp.ws.Client.prototype.onWebSocketOpen = function() {
 
     console.info(vscp.utility.getTime() + " Websocket connection established.");
     this.state = this.states.CONNECTED;
@@ -948,7 +948,7 @@ vscp.ws.Connection.prototype.onWebSocketOpen = function() {
 /**
  * This function is called by the websocket in case that the connection is closed.
  */
-vscp.ws.Connection.prototype.onWebSocketClose = function() {
+vscp.ws.Client.prototype.onWebSocketClose = function() {
 
     console.info(vscp.utility.getTime() + " Websocket connection closed.");
     this.state = this.states.DISCONNECTED;
@@ -960,7 +960,7 @@ vscp.ws.Connection.prototype.onWebSocketClose = function() {
  *
  * @param {string} msg - VSCP server response message
  */
-vscp.ws.Connection.prototype.onWebSocketMessage = function(msg) {
+vscp.ws.Client.prototype.onWebSocketMessage = function(msg) {
 
     var msgItems = msg.data.split(";"); /* Data is separated by ; */
     var eventItems = [];
@@ -1062,7 +1062,7 @@ vscp.ws.Connection.prototype.onWebSocketMessage = function(msg) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful connection establishment.
  * @param {function} [options.onError]      - Function which is called on a failed connection establishment or in case the connection is lost during the session.
  */
-vscp.ws.Connection.prototype.connect = function(options) {
+vscp.ws.Client.prototype.connect = function(options) {
 
     var onSuccess = null;
 
@@ -1160,7 +1160,7 @@ vscp.ws.Connection.prototype.connect = function(options) {
 /**
  * Disconnect from a VSCP server.
  */
-vscp.ws.Connection.prototype.disconnect = function() {
+vscp.ws.Client.prototype.disconnect = function() {
 
     console.info(vscp.utility.getTime() + " Disconnect websocket connection.");
 
@@ -1183,7 +1183,7 @@ vscp.ws.Connection.prototype.disconnect = function() {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.start = function(options) {
+vscp.ws.Client.prototype.start = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1221,7 +1221,7 @@ vscp.ws.Connection.prototype.start = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.stop = function(options) {
+vscp.ws.Client.prototype.stop = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1259,7 +1259,7 @@ vscp.ws.Connection.prototype.stop = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.clearQueue = function(options) {
+vscp.ws.Client.prototype.clearQueue = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1298,7 +1298,7 @@ vscp.ws.Connection.prototype.clearQueue = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.sendEvent = function(options) {
+vscp.ws.Client.prototype.sendEvent = function(options) {
 
     var cmdData = "";
     var onSuccess = null;
@@ -1356,7 +1356,7 @@ vscp.ws.Connection.prototype.sendEvent = function(options) {
  * @param {function} [options.onSuccess]            - Function which is called on a successful operation
  * @param {function} [options.onError]              - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.setFilter = function(options) {
+vscp.ws.Client.prototype.setFilter = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1480,7 +1480,7 @@ vscp.ws.Connection.prototype.setFilter = function(options) {
  * @param {function} [options.onSuccess]        - Function which is called on a successful operation
  * @param {function} [options.onError]          - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.createVar = function(options) {
+vscp.ws.Client.prototype.createVar = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1572,7 +1572,7 @@ vscp.ws.Connection.prototype.createVar = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.readVar = function(options) {
+vscp.ws.Client.prototype.readVar = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1613,7 +1613,7 @@ vscp.ws.Connection.prototype.readVar = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.writeVar = function(options) {
+vscp.ws.Client.prototype.writeVar = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1674,7 +1674,7 @@ vscp.ws.Connection.prototype.writeVar = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.resetVar = function(options) {
+vscp.ws.Client.prototype.resetVar = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1713,7 +1713,7 @@ vscp.ws.Connection.prototype.resetVar = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.removeVar = function(options) {
+vscp.ws.Client.prototype.removeVar = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1752,7 +1752,7 @@ vscp.ws.Connection.prototype.removeVar = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.lengthVar = function(options) {
+vscp.ws.Client.prototype.lengthVar = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1791,7 +1791,7 @@ vscp.ws.Connection.prototype.lengthVar = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.lastChangeVar = function(options) {
+vscp.ws.Client.prototype.lastChangeVar = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1831,7 +1831,7 @@ vscp.ws.Connection.prototype.lastChangeVar = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.listVar = function(options) {
+vscp.ws.Client.prototype.listVar = function(options) {
 
     var onSuccess = null;
     var onError = null;
@@ -1882,7 +1882,7 @@ vscp.ws.Connection.prototype.listVar = function(options) {
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
  */
-vscp.ws.Connection.prototype.readTable = function(options) {
+vscp.ws.Client.prototype.readTable = function(options) {
 
     var onSuccess = null;
     var onError = null;
