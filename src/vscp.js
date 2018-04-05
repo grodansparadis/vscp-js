@@ -35,8 +35,6 @@
 // Grodans Paradis AB at info@grodansparadis.com, http://www.grodansparadis.com
 //
 
-/* global aesjs:true */
-
 /** Namespace for all functionality of the VSCP provided libraries.
  * @namespace vscp
  */
@@ -1954,37 +1952,6 @@ vscp.utility.getTime = function() {
         paddingHead(now.getMinutes(), 2) + ":" +
         paddingHead(now.getSeconds(), 2) + "." +
         paddingTail(now.getMilliseconds(), 3);
-};
-
-/**
- * Calculates the VSCP server websocket authentication hash.
- *
- * @param {string} userName - User name
- * @param {string} password - Password
- * @param {string} str_iv   - 16 random byte iv in hex form
- *
- * @return {string} Authentication ("encrypted user:password")
- */
-vscp.utility.getWebSocketAuthHash = function(userName, password, vscpkey, str_iv) {
-    var iv = aesjs.utils.hex.toBytes(""+str_iv);
-
-    // We use AES-128 so 16-byte key
-    var key = aesjs.utils.hex.toBytes(vscpkey.substring(0,32));
-
-    var txt = ""+userName + ":" + password;
-
-    // Pad to multiple of 16 byte
-    while ( txt.length % 16 ) {
-        txt += " ";
-    }
-
-    var textBytes = aesjs.utils.utf8.toBytes(txt);
-
-    // Encrypt
-    var aes_cbc = new aesjs.ModeOfOperation.cbc(key, iv);
-    var encryptedBytes = aes_cbc.encrypt( textBytes );
-
-    return str_iv + ";" + aesjs.utils.hex.fromBytes(encryptedBytes);
 };
 
 /**
