@@ -35,7 +35,7 @@
 // Grodans Paradis AB at info@grodansparadis.com, http://www.grodansparadis.com
 //
 
-/*jshint bitwise: false */
+/* global aesjs:true */
 
 /** Namespace for all functionality of the VSCP provided libraries.
  * @namespace vscp
@@ -1965,7 +1965,7 @@ vscp.utility.getTime = function() {
  *
  * @return {string} Authentication ("encrypted user:password")
  */
-vscp.utility.getWebSocketAuthHash = function(userName, password, vscpkey, str_iv ) {
+vscp.utility.getWebSocketAuthHash = function(userName, password, vscpkey, str_iv) {
     var iv = aesjs.utils.hex.toBytes(""+str_iv);
 
     // We use AES-128 so 16-byte key

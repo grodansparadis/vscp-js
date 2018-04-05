@@ -35,8 +35,6 @@
 // Grodans Paradis AB at info@grodansparadis.com, http://www.grodansparadis.com
 //
 
-/*jshint bitwise: false */
-
 /** Namespace for all functionality of the VSCP provided libraries.
  * @namespace vscp
  */
@@ -532,7 +530,9 @@ vscp.Connection = function() {
     
             return;
         },
+            /* eslint-disable no-unused-vars */
         onError: function(conn, parameter) {
+            /* eslint-enable no-unused-vars */
             var cmd = conn.getPendingCommand("FUNCTION_CONNECT");
     
             console.error(vscp.utility.getTime() + " Authentication initiation aborted.");
@@ -591,7 +591,9 @@ vscp.Connection = function() {
                 conn.userNote = parameter[7];
             }
         },
+            /* eslint-disable no-unused-vars */
         onError: function(conn, parameter) {
+            /* eslint-enable no-unused-vars */
             var cmd = conn.getPendingCommand("FUNCTION_CONNECT");
     
             console.error(vscp.utility.getTime() + " Authentication failed.");

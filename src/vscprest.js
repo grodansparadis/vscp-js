@@ -32,7 +32,6 @@
 // Grodans Paradis AB at info@grodansparadis.com, http://www.grodansparadis.com
 //
 
-/*jshint bitwise: false */
 /* eslint-env jquery */
 
 /* Create the root namespace and making sure we're not overwriting it */
@@ -324,7 +323,7 @@ vscp.rest.Client = function(config) {
             }.bind(this),
             onError: function(data) {
                 if (null !== data.clientError) {
-                    console.error(vscp.utility.getTime() + " Failed to open session: " + clientError);
+                    console.error(vscp.utility.getTime() + " Failed to open session: " + data.clientError);
                 } else if (null !== data.serverError) {
                     console.error(vscp.utility.getTime() + " Failed to open session: " + JSON.stringify(data.serverError));
                 }
@@ -384,7 +383,7 @@ vscp.rest.Client = function(config) {
             }.bind(this),
             onError: function(data) {
                 if (null !== data.clientError) {
-                    console.error(vscp.utility.getTime() + " Failed to close session: " + clientError);
+                    console.error(vscp.utility.getTime() + " Failed to close session: " + data.clientError);
                 } else if (null !== data.serverError) {
                     console.error(vscp.utility.getTime() + " Failed to close session: " + JSON.stringify(data.serverError));
                 }
@@ -443,7 +442,7 @@ vscp.rest.Client = function(config) {
             }.bind(this),
             onError: function(data) {
                 if (null !== data.clientError) {
-                    console.error(vscp.utility.getTime() + " Failed to get status: " + clientError);
+                    console.error(vscp.utility.getTime() + " Failed to get status: " + data.clientError);
                 } else if (null !== data.serverError) {
                     console.error(vscp.utility.getTime() + " Failed to get status: " + JSON.stringify(data.serverError));
                 }
@@ -510,7 +509,7 @@ vscp.rest.Client = function(config) {
             }.bind(this),
             onError: function(data) {
                 if (null !== data.clientError) {
-                    console.error(vscp.utility.getTime() + " Failed to send event: " + clientError);
+                    console.error(vscp.utility.getTime() + " Failed to send event: " + data.clientError);
                 } else if (null !== data.serverError) {
                     console.error(vscp.utility.getTime() + " Failed to send event: " + JSON.stringify(data.serverError));
                 }
@@ -573,7 +572,7 @@ vscp.rest.Client = function(config) {
                 },
                 onError: function(data) {
                     if (null !== data.clientError) {
-                        console.error(vscp.utility.getTime() + " Failed to read event: " + clientError);
+                        console.error(vscp.utility.getTime() + " Failed to read event: " + data.clientError);
                     } else if (null !== data.serverError) {
                         console.error(vscp.utility.getTime() + " Failed to read event: " + JSON.stringify(data.serverError));
                     }
@@ -793,7 +792,7 @@ vscp.rest.Client = function(config) {
             }.bind(this),
             onError: function(data) {
                 if (null !== data.clientError) {
-                    console.error(vscp.utility.getTime() + " Failed to set filter: " + clientError);
+                    console.error(vscp.utility.getTime() + " Failed to set filter: " + data.clientError);
                 } else if (null !== data.serverError) {
                     console.error(vscp.utility.getTime() + " Failed to set filter: " + JSON.stringify(data.serverError));
                 }
@@ -850,7 +849,7 @@ vscp.rest.Client = function(config) {
             }.bind(this),
             onError: function(data) {
                 if (null !== data.clientError) {
-                    console.error(vscp.utility.getTime() + " Failed to clear queue: " + clientError);
+                    console.error(vscp.utility.getTime() + " Failed to clear queue: " + data.clientError);
                 } else if (null !== data.serverError) {
                     console.error(vscp.utility.getTime() + " Failed to clear queue: " + JSON.stringify(data.serverError));
                 }
@@ -981,7 +980,7 @@ vscp.rest.Client = function(config) {
             }.bind(this),
             onError: function(data) {
                 if (null !== data.clientError) {
-                    console.error(vscp.utility.getTime() + " Failed to create variable: " + clientError);
+                    console.error(vscp.utility.getTime() + " Failed to create variable: " + data.clientError);
                 } else if (null !== data.serverError) {
                     console.error(vscp.utility.getTime() + " Failed to create variable: " + JSON.stringify(data.serverError));
                 }
@@ -1043,7 +1042,7 @@ vscp.rest.Client = function(config) {
                 },
                 onError: function(data) {
                     if (null !== data.clientError) {
-                        console.error(vscp.utility.getTime() + " Failed to read variable: " + clientError);
+                        console.error(vscp.utility.getTime() + " Failed to read variable: " + data.clientError);
                     } else if (null !== data.serverError) {
                         console.error(vscp.utility.getTime() + " Failed to read variable: " + JSON.stringify(data.serverError));
                     }
@@ -1161,7 +1160,7 @@ vscp.rest.Client = function(config) {
             }.bind(this),
             onError: function(data) {
                 if (null !== data.clientError) {
-                    console.error(vscp.utility.getTime() + " Failed to write variable: " + clientError);
+                    console.error(vscp.utility.getTime() + " Failed to write variable: " + data.clientError);
                 } else if (null !== data.serverError) {
                     console.error(vscp.utility.getTime() + " Failed to write variable: " + JSON.stringify(data.serverError));
                 }
@@ -1227,7 +1226,7 @@ vscp.rest.Client = function(config) {
             },
             onError: function(data) {
                 if (null !== data.clientError) {
-                    console.error(vscp.utility.getTime() + " Failed to remove variable: " + clientError);
+                    console.error(vscp.utility.getTime() + " Failed to remove variable: " + data.clientError);
                 } else if (null !== data.serverError) {
                     console.error(vscp.utility.getTime() + " Failed to remove variable: " + JSON.stringify(data.serverError));
                 }
@@ -1299,7 +1298,7 @@ vscp.rest.Client = function(config) {
                 },
                 onError: function(data) {
                     if (null !== data.clientError) {
-                        console.error(vscp.utility.getTime() + " Failed to list variables: " + clientError);
+                        console.error(vscp.utility.getTime() + " Failed to list variables: " + data.clientError);
                     } else if (null !== data.serverError) {
                         console.error(vscp.utility.getTime() + " Failed to list variables: " + JSON.stringify(data.serverError));
                     }
