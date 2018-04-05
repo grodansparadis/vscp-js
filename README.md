@@ -17,13 +17,58 @@ First bind this repository as git submodule to your own one.
 
 ### Websocket interface
 
+Include the following javascript files to your HTML:
+``` javascript
+<!-- VSCP websocket authentication encryption/decryption -->
+<script type="text/javascript" src="js/vscp-js/3rd-party/aes-js/3.1.0/index.js"></script>
+<!-- VSCP common core library -->
+<script type="text/javascript" src="js/vscp-js/vscp.js"></script>
+<!-- VSCP websocket client library -->
+<script type="text/javascript" src="js/vscp-js/vscpws.js"></script>
+```
+
+#### Open connection
+
+TODO
+
+#### Close connection
+
+TODO
+
+#### Send events
+
+TODO
+
+#### Receive events
+
 TODO
 
 ### REST interface
 
+Include the following javascript files to your HTML:
+``` javascript
+<!-- VSCP websocket authentication encryption/decryption -->
+<!-- VSCP common core library -->
+<script type="text/javascript" src="js/vscp-js/vscp.js"></script>
+<!-- VSCP REST client library -->
+<script type="text/javascript" src="js/vscp-js/vscprest.js"></script>
+```
+
+#### Open connection
+
 TODO
 
-## 
+#### Close connection
+
+TODO
+
+#### Send events
+
+TODO
+
+#### Receive events
+
+TODO
 
 <hr>
 Copyright © 2015,2018 Andreas Merkle <vscp@blue-andi.de><br />
