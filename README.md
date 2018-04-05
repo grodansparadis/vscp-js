@@ -29,11 +29,31 @@ Include the following javascript files to your HTML:
 
 #### Open connection
 
-TODO
+``` javascript
+var vscpClient = new vscp.ws.Client();
+
+vscpClient.connect({
+    url: "ws://localhost:8884/ws1",
+    userName: "admin",
+    password: "secret",
+    vscpkey: "A4A86F7D7E119BA3F0CD06881E371B989B33B6D606A863B633EF529D64544F8E",
+    authdomain: "mydomain.com",
+    onSuccess: function() {
+        // Implement your code here ...
+    },
+    onError: function() {
+        // Implement your code here ...
+    }
+});
+```
+
+Note, the websocket API doesn't support jquery promises yet, as the REST client API.
 
 #### Close connection
 
-TODO
+``` javascript
+vscpClient.disconnect();
+```
 
 #### Send events
 
@@ -47,7 +67,8 @@ TODO
 
 Include the following javascript files to your HTML:
 ``` javascript
-<!-- VSCP websocket authentication encryption/decryption -->
+<!-- jQuery used for ajax calls and promises -->
+<script type="text/javascript" src="js/3rd-party/jquery/3.2.1/jquery-3.2.1.min.js"></script>
 <!-- VSCP common core library -->
 <script type="text/javascript" src="js/vscp-js/vscp.js"></script>
 <!-- VSCP REST client library -->
@@ -56,11 +77,71 @@ Include the following javascript files to your HTML:
 
 #### Open connection
 
-TODO
+Example using callbacks:
+
+``` javascript
+var vscpClient = new vscp.rest.Client({
+    baseUrl: "http://localhost:8884"
+});
+
+vscpClient.openSession({
+    user: "admin",
+    password: "secret",
+    onSuccess: function() {
+        // Implement your code here ...
+    },
+    onError: function() {
+        // Implement your code here ...
+    }
+})
+```
+
+Example using jquery promises:
+
+``` javascript
+var vscpClient = new vscp.rest.Client({
+    baseUrl: "http://localhost:8884"
+});
+
+vscpClient.openSession({
+    user: "admin",
+    password: "secret"
+})
+.done(function(){
+    // Implement your code here ...
+})
+.fail(function(){
+    // Implement your code here ...
+});
+
+```
 
 #### Close connection
 
-TODO
+Example using callbacks:
+
+``` javascript
+vscpClient.closeSession({
+    onSuccess: function() {
+        // Implement your code here ...
+    },
+    onError: function() {
+        // Implement your code here ...
+    }
+});
+```
+
+Example using jquery promises:
+
+``` javascript
+vscpClient.closeSession()
+.done(function(){
+    // Implement your code here ...
+})
+.fail(function() {
+    // Implement your code here ...
+})
+```
 
 #### Send events
 
