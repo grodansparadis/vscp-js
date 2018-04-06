@@ -10,17 +10,21 @@ The communication to the VSCP daemon takes place via websocket and REST.
 
 ## How to use them?
 
-First bind this repository as git submodule to your own one.
+In general its recommended to use a released version. If you know what to do, use the trunk, but don't complain later on. ;-)
+
+If you like, you can bind this repository as git submodule to your own one.
 * Add it e.g. to the existing folder ```js``` via ```git submodule add https://github.com/grodansparadis/vscp-js.git js/vscp-js```, which will create the subfolder ```vscp-js``` and clones the repository there.
 * The previous step will create an additional file, called ```.gitmodules```, which contains the submodule informations.
 * Commit the changes now to your repository.
+
+Note, the submodule is not automatically updated with a ```git pull```, you have to explicit call ```git submodule update --recursive```.
 
 ### Websocket interface
 
 Include the following javascript files to your HTML:
 ``` javascript
 <!-- VSCP websocket authentication encryption/decryption -->
-<script type="text/javascript" src="js/vscp-js/3rd-party/aes-js/3.1.0/index.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/aes-js/3.1.0/index.min.js"></script>
 <!-- VSCP common core library -->
 <script type="text/javascript" src="js/vscp-js/vscp.js"></script>
 <!-- VSCP websocket client library -->
@@ -68,7 +72,7 @@ TODO
 Include the following javascript files to your HTML:
 ``` javascript
 <!-- jQuery used for ajax calls and promises -->
-<script type="text/javascript" src="js/3rd-party/jquery/3.2.1/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- VSCP common core library -->
 <script type="text/javascript" src="js/vscp-js/vscp.js"></script>
 <!-- VSCP REST client library -->
