@@ -17,7 +17,7 @@ If you like, you can bind this repository as git submodule to your own one.
 * The previous step will create an additional file, called ```.gitmodules```, which contains the submodule informations.
 * Commit the changes now to your repository.
 
-Note, the submodule is not automatically updated with a ```git pull```, you have to explicit call ```git submodule update --recursive```.
+Note, the submodule is not automatically updated with a ```git pull```, you have to explicit call ```git pull --recursive``` or ```git submodule update --recursive --remote```.
 
 ### Websocket interface
 
@@ -30,6 +30,8 @@ Include the following javascript files to your HTML:
 <!-- VSCP websocket client library -->
 <script type="text/javascript" src="js/vscp-js/vscpws.js"></script>
 ```
+
+The websocket API supports only callbacks to master the asynchronous communication. If you like jquery promises, you have to wrap them around by yourself. jquery promises may be supported in the future as well, similar to the REST API.
 
 #### Open connection
 
@@ -61,11 +63,56 @@ vscpClient.disconnect();
 
 #### Send events
 
-TODO
+``` javascript
+vscpClient.sendEvent({
+    event: new vscp.Event({
+        vscpClass:      vscp.constants.classes.VSCP_CLASS1_CONTROL,
+        vscpType:       vscp.constants.types.VSCP_TYPE_CONTROL_TURNON,
+        vscpPriority:   vscp.constants.priorities.PRIORITY_3_NORMAL,
+        vscpData:       [ 0, 1, 12 ]
+    }),
+
+    onSuccess: function(client) {
+        console.info("TURNON event sent.");
+    },
+
+    onError: function(client) {
+        console.error("Failed to send TURNON event.");
+    }
+
+});
+```
 
 #### Receive events
 
-TODO
+First add a event listener to the client.
+
+``` javascript
+
+// Catch all events and show them in the trace tab.
+var eventListener = function(client, evt) {
+    // Implement your code here ...
+};
+
+// Add event listener
+vscpClient.addEventListener(eventListener);
+```
+
+In the second step, start listening.
+
+``` javascript
+// Start receiving VSCP events
+vscpClient.start({
+
+    onSuccess: function(client) {
+        console.info("Receiving VSCP events started.");
+    },
+
+    onError: function(client) {
+        console.error("Failed to start receiving VSCP events.");
+    }
+});
+```
 
 ### REST interface
 
@@ -78,6 +125,9 @@ Include the following javascript files to your HTML:
 <!-- VSCP REST client library -->
 <script type="text/javascript" src="js/vscp-js/vscprest.js"></script>
 ```
+
+The REST API supports callbacks and jquery promises to master the asynchronous communication.
+Only the first two of the following examples will shows both possibilities. All others continoue using promises.
 
 #### Open connection
 
@@ -97,7 +147,7 @@ vscpClient.openSession({
     onError: function() {
         // Implement your code here ...
     }
-})
+});
 ```
 
 Example using jquery promises:
@@ -144,16 +194,73 @@ vscpClient.closeSession()
 })
 .fail(function() {
     // Implement your code here ...
-})
+});
 ```
 
 #### Send events
 
-TODO
+``` javascript
+vscpRestClient.sendEvent({
+    event: new vscp.Event({
+        vscpClass:      vscp.constants.classes.VSCP_CLASS1_INFORMATION,
+        vscpType:       vscp.constants.types.VSCP_TYPE_INFORMATION_NODE_HEARTBEAT,
+        vscpPriority:   vscp.constants.priorities.PRIORITY_3_NORMAL,
+        vscpData:       [ 138, 0, 255 ]
+    })
+})
+.done(function(data) {
+    // Implement your code here ...
+})
+.fail(function(data) {
+    // Implement your code here ...
+});
+```
 
 #### Receive events
 
-TODO
+Reading a single event:
+
+``` javascript
+vscpClient.readEvent()
+.done(function(data) {
+
+    // Event received?
+    if (0 < data.response.count) {
+        var evt = data.response.event[0];
+
+        // Implement your code here ...
+    }
+})
+.fail(function(data) {
+    // Implement your code here ...
+})
+```
+
+Reading 10 events:
+
+``` javascript
+vscpClient.readEvent({
+    count: 10
+})
+.done(function(data) {
+
+    var index = 0;
+    var evt = null;
+
+    // Event received?
+    if (0 < data.response.count) {
+
+        for(index = 0; index < data.response.count; ++index) {
+            evt = data.response.event[index];
+
+            // Implement your code here ...
+        }
+    }
+})
+.fail(function(data) {
+    // Implement your code here ...
+})
+```
 
 <hr>
 Copyright © 2015,2018 Andreas Merkle <vscp@blue-andi.de><br />
