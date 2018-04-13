@@ -54,6 +54,7 @@ vscp.version = {
 /** Create a general purpose namespace method. This will allow us to create
  * namespace a bit easier.
  *
+ * @private
  * @param {string} namespace Complete namespace, e.g. "a.b.c.d"
  */
 vscp._createNS = function(namespace) {

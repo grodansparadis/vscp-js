@@ -179,6 +179,8 @@ vscp.ws.Client = function() {
     this.substate = this.substates.CLOSED;
 
     /** VSCP server command
+     * 
+     * @private
      * @class
      * @param {string} command      - Server command string
      * @param {function} onSuccess  - Function which is called on successful operation
@@ -200,12 +202,15 @@ vscp.ws.Client = function() {
     };
 
     /** Queue contains all pending VSCP server commands
+     * 
+     * @private
      * @member {Command[]}
      */
     var cmdQueue = [];
 
     /** Get the index of a command in the queue.
      *
+     * @private
      * @param {string} command - Server command string
      *
      * @return {number} Index of command in the queue. If index is < 0, the command was not found.
@@ -229,6 +234,7 @@ vscp.ws.Client = function() {
 
     /** Get command from queue with pending commands.
      *
+     * @private
      * @param {string} command - Server command string
      *
      * @return {Command} Command object
@@ -251,6 +257,7 @@ vscp.ws.Client = function() {
     /**
      * Send command to VSCP server.
      *
+     * @private
      * @param {object} options              - Options
      * @param {string} options.command      - Command string
      * @param {string} options.data         - Data string
@@ -318,6 +325,7 @@ vscp.ws.Client = function() {
     /**
      * Send event to VSCP server.
      *
+     * @private
      * @param {object} options              - Options
      * @param {string} options.data         - Data string
      * @param {function} options.onSuccess  - Callback on success
@@ -363,6 +371,7 @@ vscp.ws.Client = function() {
     /**
      * Signal success of the current asynchronous operation.
      *
+     * @private
      * @param {string} command  - Server command string
      * @param {object} [obj]    - Options for on success callback
      */
@@ -386,6 +395,7 @@ vscp.ws.Client = function() {
     /**
      * Signal failed of the current asynchronous operation.
      *
+     * @private
      * @param {string} command  - Server command string
      * @param {object} [obj]    - Options for on error callback
      */
@@ -408,6 +418,8 @@ vscp.ws.Client = function() {
 
     /**
      * Signal a connection error.
+     * 
+     * @private
      */
     this.signalConnError = function() {
         if (("function" === typeof this.onConnError) &&
@@ -422,7 +434,9 @@ vscp.ws.Client = function() {
      * true, which means no further actions shall take place in this object.
      * Otherwise the message is handled by the standard onMessage handler here.
      *
+     * @private
      * @param {string} msg - VSCP server response message
+     * 
      * @return {boolean} Message is handled (true) or not (false).
      */
     this.signalMessage = function(msg) {
@@ -442,6 +456,7 @@ vscp.ws.Client = function() {
     /**
      * Signal a received VSCP event.
      *
+     * @private
      * @param {vscp.Event} vscpEvent - VSCP event
      */
     this.signalEvent = function(vscpEvent) {
@@ -459,6 +474,7 @@ vscp.ws.Client = function() {
     /**
      * Signal a received variable.
      *
+     * @private
      * @param {object} variable                 - Variable object
      * @param {number} variable.id              - Consecutive number
      * @param {string} variable.name            - Variable name
@@ -476,6 +492,7 @@ vscp.ws.Client = function() {
     /**
      * Signal a received table row.
      *
+     * @private
      * @param {object} row          - Table row object
      * @param {string} row.date     - Date and time
      * @param {string} row.value    - Value
@@ -546,6 +563,8 @@ vscp.ws.Client = function() {
     };
 
     /** VSCP websocket command responses and unsolicited messages
+     * 
+     * @private
      * @member {object}
      */
     this.webSocketMessages = [{

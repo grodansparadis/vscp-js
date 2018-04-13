@@ -94,6 +94,7 @@ vscp.rest.Client = function(config) {
 
     /** Build complete URL, including command path.
      * 
+     * @private
      * @param {string} path - Relative command path, after REST API version.
      * @return URL
      */
@@ -108,6 +109,7 @@ vscp.rest.Client = function(config) {
      * The onSuccess and onError function parameter are harmonized here.
      * This makes it easier to process them further.
      * 
+     * @private
      * @param {object}      options             - Options
      * @param {string}      options.path        - Relative path
      * @param {string[]}    options.parameter   - Array of URL parameter
@@ -246,6 +248,7 @@ vscp.rest.Client = function(config) {
 
     /** Prepare error object, call error callback and return rejected promise.
      * 
+     * @private
      * @param {string}      error       - Error description
      * @param {function}    [onError]   - Callback
      * 
