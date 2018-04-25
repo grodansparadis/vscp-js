@@ -176,13 +176,17 @@ vscp.mdf.constants = {
 
             return value;
         },
+        /* eslint-disable no-unused-vars */
         "int64_t": function(data) {
+        /* eslint-enable no-unused-vars */
             // Javascript doesn't support signed 64 bit integer.
             // All numbers in javascript are 64 bit "double" precision IEE754 floating point.
             // The largest positive whole number that can therefore be accurately represented is 2^53
             return 0;
         },
+        /* eslint-disable no-unused-vars */
         "uint64_t": function(data) {
+        /* eslint-enable no-unused-vars */
             // Javascript doesn't support signed 64 bit integer.
             // All numbers in javascript are 64 bit "double" precision IEE754 floating point.
             // The largest positive whole number that can therefore be accurately represented is 2^53
@@ -199,6 +203,7 @@ vscp.mdf.constants = {
             var mask = 0;
             var powerOf2 = 1;
             var exponentSign = false;
+            var prevIndex = 0;
 
             //  1 bit sign
             //  8 bit exponent
@@ -253,7 +258,9 @@ vscp.mdf.constants = {
                 fractional = 1.0 / powerOf2;
             }
 
-            for (index = index; index < 23; ++index) {
+            prevIndex = index;
+
+            for (index = prevIndex; index < 23; ++index) {
                 powerOf2 *= 2; // powerOf2 <<= 1;
 
                 if (0 !== (mantissa & mask)) {
@@ -280,6 +287,7 @@ vscp.mdf.constants = {
             var maskLsb = 0;
             var powerOf2 = 1;
             var exponentSign = false;
+            var prevIndex = 0;
 
             //  1 bit sign
             // 11 bit exponent
@@ -351,7 +359,9 @@ vscp.mdf.constants = {
                 fractional = 1.0 / powerOf2;
             }
 
-            for (index = index; index < 52; ++index) {
+            prevIndex = index;
+
+            for (index = prevIndex; index < 52; ++index) {
                 powerOf2 *= 2; // powerOf2 <<= 1;
 
                 if (0 < maskMsb) {
@@ -377,7 +387,7 @@ vscp.mdf.constants = {
             // yy yy mm dd
             var day = data[3];
             var month = data[2];
-            var year = data[0] * 256 + data[1];
+            var year = (data[0] * 256) + data[1];
 
             return "" + day + "-" + month + "-" + year;
         },
@@ -541,19 +551,25 @@ vscp.mdf.constants = {
 
             return dataArray;
         },
+        /* eslint-disable no-unused-vars */
         "int64_t": function(data) {
+        /* eslint-enable no-unused-vars */
             // Javascript doesn't support signed 64 bit integer.
             // All numbers in javascript are 64 bit "double" precision IEE754 floating point.
             // The largest positive whole number that can therefore be accurately represented is 2^53
             return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         },
+        /* eslint-disable no-unused-vars */
         "uint64_t": function(data) {
+        /* eslint-enable no-unused-vars */
             // Javascript doesn't support signed 64 bit integer.
             // All numbers in javascript are 64 bit "double" precision IEE754 floating point.
             // The largest positive whole number that can therefore be accurately represented is 2^53
             return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         },
+        /* eslint-disable no-unused-vars */
         "float": function(data) {
+        /* eslint-enable no-unused-vars */
 
             //  1 bit sign
             //  8 bit exponent
@@ -563,7 +579,9 @@ vscp.mdf.constants = {
 
             return [0, 0, 0, 0, 0, 0, 0, 0];
         },
+        /* eslint-disable no-unused-vars */
         "double": function(data) {
+        /* eslint-enable no-unused-vars */
 
             //  1 bit sign
             // 11 bit exponent
@@ -815,14 +833,14 @@ vscp.mdf.loadLocal = function(options) {
 
     reader.readAsText(options.fileRef);
 
-    reader.onload = function(e) {
+    reader.onload = function() {
         var xml = $.parseXML(reader.result);
         var xmlDoc = $(xml);
 
         options.onSuccess(xmlDoc);
     };
 
-    reader.onerror = function(e) {
+    reader.onerror = function() {
 
         if (null !== onError) {
             onError();
