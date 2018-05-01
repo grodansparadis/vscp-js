@@ -425,9 +425,11 @@ vscp.ws.Client = function() {
                         cmd.resolve(this);
                     }
                 } else {
+                    /* eslint-disable no-lonely-if */
                     if (null !== cmd.resolve) {
                         cmd.resolve(this, obj);
                     }
+                    /* eslint-enable no-lonely-if */
                 }
             }
         }
@@ -462,9 +464,11 @@ vscp.ws.Client = function() {
                         cmd.reject(this);
                     }
                 } else {
+                    /* eslint-disable no-lonely-if */
                     if (null !== cmd.reject) {
                         cmd.reject(this, obj);
                     }
+                    /* eslint-enable no-lonely-if */
                 }
             }
         }
@@ -1947,7 +1951,7 @@ vscp.ws.Client.prototype.removeVar = function(options) {
             data: options.name,
             onSuccess: onSuccess,
             onError: onError,
-            resolve, resolve,
+            resolve: resolve,
             reject: reject
         });
     }.bind(this));
