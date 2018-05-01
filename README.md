@@ -300,5 +300,5 @@ vscpClient.readEvent({
 ```
 
 <hr>
-Copyright © 2015,2018 Andreas Merkle <vscp@blue-andi.de><br />
+Copyright &copy; 2015-2018 Andreas Merkle <vscp@blue-andi.de><br />
 Copyright &copy; 2012-2018 <a href="http://www.grodansparadis.com">Grodans Paradis AB (Paradise of the Frog)</a>
