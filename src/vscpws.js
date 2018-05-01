@@ -185,20 +185,34 @@ vscp.ws.Client = function() {
      * @param {string} command      - Server command string
      * @param {function} onSuccess  - Function which is called on successful operation
      * @param {function} onerror    - Function which is called on failed operation
+     * @param {function} resolve    - Promise resolve function
+     * @param {function} reject     - Promise reject function
      */
-    var Command = function(command, onSuccess, onError) {
+    var Command = function(command, onSuccess, onError, resolve, reject) {
         /** Server command string
          * @member {string}
          */
         this.command = command;
+
         /** Function which is called on successful operation
          * @member {function}
          */
         this.onSuccess = onSuccess;
+
         /** Function which is called on failed operation
          * @member {function}
          */
         this.onError = onError;
+
+        /** Function which is called on successful operation
+         * @member {function}
+         */
+        this.resolve = resolve;
+
+        /** Function which is called on failed operation
+         * @member {function}
+         */
+        this.reject = reject;
     };
 
     /** Queue contains all pending VSCP server commands
@@ -255,15 +269,19 @@ vscp.ws.Client = function() {
     };
 
     /**
-     * Send command to VSCP server.
+     * Send command to remote VSCP server and store the command in the internal queue.
+     * In some situation only a virtual command shall be stored, but not sent. In this
+     * case use set the 'simulate' parameter to true.
      *
      * @private
-     * @param {object} options              - Options
-     * @param {string} options.command      - Command string
-     * @param {string} options.data         - Data string
-     * @param {boolean} options.simulate    - Simulate the command (true/false)
-     * @param {function} options.onSuccess  - Callback on success
-     * @param {function} options.onError    - Callback on error
+     * @param {object} options                  - Options
+     * @param {string} options.command          - Command string
+     * @param {string} [options.data]           - Data string (default: empty)
+     * @param {boolean} [options.simulate]      - Simulate the command (true/false) (default: false)
+     * @param {function} [options.onSuccess]    - Callback on success (default: null)
+     * @param {function} [options.onError]      - Callback on error (default: null)
+     * @param {function} [options.resolve]      - Promise resolve function (default: null)
+     * @param {function} [options.reject]       - Promise reject function (default: null)
      */
     this._sendCommand = function(options) {
 
@@ -273,6 +291,8 @@ vscp.ws.Client = function() {
         var simulate = false;
         var onSuccess = null;
         var onError = null;
+        var resolve = null;
+        var reject = null;
 
         if ("undefined" === typeof options) {
             console.error(vscp.utility.getTime() + " Options are missing.");
@@ -303,8 +323,16 @@ vscp.ws.Client = function() {
             onError = options.onError;
         }
 
+        if ("function" === typeof options.resolve) {
+            resolve = options.resolve;
+        }
+
+        if ("function" === typeof options.reject) {
+            reject = options.reject;
+        }
+
         /* Put command to queue with pending commands */
-        cmdObj = new Command(options.command, onSuccess, onError);
+        cmdObj = new Command(options.command, onSuccess, onError, resolve, reject);
         cmdQueue.push(cmdObj);
 
         if (false === simulate) {
@@ -389,6 +417,19 @@ vscp.ws.Client = function() {
                     cmd.onSuccess(this, obj);
                 }
             }
+
+            if (("function" === typeof cmd.resolve) && (null !== cmd.resolve)) {
+
+                if ("undefined" === typeof obj) {
+                    if (null !== cmd.resolve) {
+                        cmd.resolve(this);
+                    }
+                } else {
+                    if (null !== cmd.resolve) {
+                        cmd.resolve(this, obj);
+                    }
+                }
+            }
         }
     };
 
@@ -411,6 +452,19 @@ vscp.ws.Client = function() {
                     cmd.onError(this);
                 } else {
                     cmd.onError(this, obj);
+                }
+            }
+
+            if (("function" === typeof cmd.reject) && (null !== cmd.reject)) {
+
+                if ("undefined" === typeof obj) {
+                    if (null !== cmd.reject) {
+                        cmd.reject(this);
+                    }
+                } else {
+                    if (null !== cmd.reject) {
+                        cmd.reject(this, obj);
+                    }
                 }
             }
         }
@@ -584,7 +638,9 @@ vscp.ws.Client = function() {
                                                 parameter[2] // iv
                         ),
                     onSuccess: null,
-                    onError: null
+                    onError: null,
+                    resolve: null,
+                    reject: null
                 });
             }
     
@@ -602,6 +658,10 @@ vscp.ws.Client = function() {
                 client.socket.close();
             } else {
                 console.error(vscp.utility.getTime() + " AUTH0 negative reply received, but no challenge is pending!?");
+            }
+
+            if (null !== cmd.reject) {
+                cmd.reject(Error("Authentication failed."));
             }
     
             return;
@@ -623,9 +683,12 @@ vscp.ws.Client = function() {
                                             parameter[2] // iv
                         ),
                     onSuccess: null,
-                    onError: null
+                    onError: null,
+                    resolve: null,
+                    reject: null
                 });
             }
+
             return;
         },
         onError: null
@@ -637,11 +700,6 @@ vscp.ws.Client = function() {
             if (null !== cmd) {
                 console.info(vscp.utility.getTime() + " Authentication successful.");
     
-                if (client.states.CONNECTED === client.state) {
-                    client.state = client.states.AUTHENTICATED;
-                    client.signalSuccess("FUNCTION_CONNECT");
-                }
-    
                 // Save authenticated user info
                 client.userId = parseInt(parameter[2]);
                 client.userFullname = parameter[3];
@@ -649,7 +707,14 @@ vscp.ws.Client = function() {
                 client.userRemotes = parameter[5];
                 client.userEvents = parameter[6];
                 client.userNote = parameter[7];
+
+                if (client.states.CONNECTED === client.state) {
+                    client.state = client.states.AUTHENTICATED;
+                    client.signalSuccess("FUNCTION_CONNECT");
+                }
             }
+
+            return;
         },
             /* eslint-disable no-unused-vars */
         onError: function(client, parameter) {
@@ -664,6 +729,12 @@ vscp.ws.Client = function() {
             } else {
                 console.error(vscp.utility.getTime() + " AUTH1 negative reply received, but no challenge is pending!?");
             }
+
+            if (null !== cmd.reject) {
+                cmd.reject(Error("Authentication failed."));
+            }
+
+            return;
         }
     }, {
         event: "OPEN",
@@ -671,6 +742,8 @@ vscp.ws.Client = function() {
             console.info(vscp.utility.getTime() + " Receiving events started.");
             client.substate = client.substates.OPEN;
             client.signalSuccess(parameter[1]);
+
+            return;
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Receiving events couldn't be started.");
@@ -680,6 +753,8 @@ vscp.ws.Client = function() {
                     str: parameter[3] // Error string
                 }
             );
+
+            return;
         }
     }, {
         event: "CLOSE",
@@ -960,7 +1035,9 @@ vscp.ws.Client.prototype.onWebSocketOpen = function() {
         command: "CHALLENGE",
         data: "",
         onSuccess: null,
-        onError: null
+        onError: null,
+        resolve: null,
+        reject: null
     });
 };
 
@@ -1080,119 +1157,142 @@ vscp.ws.Client.prototype.onWebSocketMessage = function(msg) {
  * @param {function} [options.onMessage]    - Function which is called on any received VSCP response message.
  * @param {function} [options.onSuccess]    - Function which is called on a successful connection establishment.
  * @param {function} [options.onError]      - Function which is called on a failed connection establishment or in case the connection is lost during the session.
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.connect = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
+        var onSuccess = null;
 
-    if (this.states.DISCONNECTED !== this.state) {
-        console.error(vscp.utility.getTime() + " A connection already exists.");
-        return;
-    }
+        if (this.states.DISCONNECTED !== this.state) {
+            console.error(vscp.utility.getTime() + " A connection already exists.");
+            reject(Error("A connection already exists."));
+            return;
+        }
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("string" !== typeof options.url) {
-        console.error(vscp.utility.getTime() + " URL is missing.");
-        return;
-    }
+        if ("string" !== typeof options.url) {
+            console.error(vscp.utility.getTime() + " URL is missing.");
+            reject(Error("URL is missing."));
+            return;
+        }
 
-    this.url = options.url;
+        this.url = options.url;
 
-    if ("string" !== typeof options.userName) {
-        console.error(vscp.utility.getTime() + " User name is missing.");
-        return;
-    }
+        if ("string" !== typeof options.userName) {
+            console.error(vscp.utility.getTime() + " User name is missing.");
+            reject(Error("User name is missing."));
+            return;
+        }
 
-    this.userName = options.userName;
+        this.userName = options.userName;
 
-    if ("string" !== typeof options.password) {
-        console.error(vscp.utility.getTime() + " Password is missing.");
-        return;
-    }
+        if ("string" !== typeof options.password) {
+            console.error(vscp.utility.getTime() + " Password is missing.");
+            reject(Error("Password is missing."));
+            return;
+        }
 
-    this.password = options.password;
+        this.password = options.password;
 
-    if ("string" !== typeof options.authdomain) {
-        console.error(vscp.utility.getTime() + " authdomain is missing.");
-        return;
-    }
+        if ("string" !== typeof options.authdomain) {
+            console.error(vscp.utility.getTime() + " authdomain is missing.");
+            reject(Error("authdomain is missing."));
+            return;
+        }
 
-    this.authdomain = options.authdomain;
+        this.authdomain = options.authdomain;
 
-    if ("string" !== typeof options.vscpkey) {
-        console.error(vscp.utility.getTime() + " vscpkey is missing.");
-        return;
-    }
+        if ("string" !== typeof options.vscpkey) {
+            console.error(vscp.utility.getTime() + " vscpkey is missing.");
+            reject(Error("vscpkey is missing."));
+            return;
+        }
 
-    this.vscpkey = options.vscpkey;
+        this.vscpkey = options.vscpkey;
 
-    if ("function" !== typeof options.onMessage) {
-        this.onMessage = null;
-    } else {
-        this.onMessage = options.onMessage;
-    }
+        if ("function" !== typeof options.onMessage) {
+            this.onMessage = null;
+        } else {
+            this.onMessage = options.onMessage;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" !== typeof options.onError) {
-        this.onConnError = null;
-    } else {
-        this.onConnError = options.onError;
-    }
+        if ("function" !== typeof options.onError) {
+            this.onConnError = null;
+        } else {
+            this.onConnError = options.onError;
+        }
 
-    console.info(vscp.utility.getTime() +
-        " Websocket connect to " + options.url +
-        " (user name: " + this.userName + ", password: " + this.passwordHash + ")");
+        console.info(vscp.utility.getTime() +
+            " Websocket connect to " + options.url +
+            " (user name: " + this.userName + ", password: " + this.passwordHash + ")");
 
-    this.socket = new WebSocket(options.url);
+        this.socket = new WebSocket(options.url);
 
-    if (null === this.socket) {
-        console.error(vscp.utility.getTime() +
-            " Couldn't open a websocket connection.");
+        if (null === this.socket) {
+            console.error(vscp.utility.getTime() +
+                " Couldn't open a websocket connection.");
 
-        this.signalConnError();
+            this.signalConnError();
 
-        this.onConnError = null;
-        this.onMessage = null;
-    } else {
+            this.onConnError = null;
+            this.onMessage = null;
 
-        this._sendCommand({
-            command: "FUNCTION_CONNECT",
-            data: "",
-            simulate: true,
-            onSuccess: onSuccess,
-            onError: null
-        });
+            reject(Error("Couldn't open a websocket connection."));
+        } else {
 
-        this.socket.onopen = this.onWebSocketOpen.bind(this);
-        this.socket.onclose = this.onWebSocketClose.bind(this);
-        this.socket.onmessage = this.onWebSocketMessage.bind(this);
-    }
+            this._sendCommand({
+                command: "FUNCTION_CONNECT",
+                data: "",
+                simulate: true,
+                onSuccess: onSuccess,
+                onError: null,
+                resolve: resolve,
+                reject: reject
+            })
+
+            this.socket.onopen = this.onWebSocketOpen.bind(this);
+            this.socket.onclose = this.onWebSocketClose.bind(this);
+            this.socket.onmessage = this.onWebSocketMessage.bind(this);
+        }
+    }.bind(this));
 };
 
 /**
  * Disconnect from a VSCP server.
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.disconnect = function() {
+    /* eslint-disable no-unused-vars */
+    return new Promise(function(resolve, reject) {
+    /* eslint-enable no-unused-vars */
 
-    console.info(vscp.utility.getTime() + " Disconnect websocket connection.");
+        console.info(vscp.utility.getTime() + " Disconnect websocket connection.");
 
-    if (null !== this.socket) {
-        this.onConnError = null;
-        this.onMessage = null;
-        this.onEvent = [];
-        this.socket.close();
-        this.socket = null;
-        this.state = this.states.DISCONNECTED;
-        this.substate = this.substates.CLOSED;
-        this.cmdQueue = [];
-    }
+        if (null !== this.socket) {
+            this.onConnError = null;
+            this.onMessage = null;
+            this.onEvent = [];
+            this.socket.close();
+            this.socket = null;
+            this.state = this.states.DISCONNECTED;
+            this.substate = this.substates.CLOSED;
+            this.cmdQueue = [];
+        }
+
+        resolve();
+    }.bind(this));
 };
 
 /**
@@ -1201,36 +1301,44 @@ vscp.ws.Client.prototype.disconnect = function() {
  * @param {object} options                  - Options
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.start = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
+        var onSuccess = null;
+        var onError = null;
 
-    if (this.states.AUTHENTICATED !== this.state) {
-        console.error(vscp.utility.getTime() + " Connection is not authenticated.");
-        return;
-    }
+        if (this.states.AUTHENTICATED !== this.state) {
+            console.error(vscp.utility.getTime() + " Connection is not authenticated.");
+            reject(Error("Connection is not authenticated."));
+            return;
+        }
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    this._sendCommand({
-        command: "OPEN",
-        data: "",
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "OPEN",
+            data: "",
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
@@ -1239,36 +1347,44 @@ vscp.ws.Client.prototype.start = function(options) {
  * @param {object} options                  - Options
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.stop = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
+        var onSuccess = null;
+        var onError = null;
 
-    if (this.states.AUTHENTICATED !== this.state) {
-        console.error(vscp.utility.getTime() + " Connection is not authenticated.");
-        return;
-    }
+        if (this.states.AUTHENTICATED !== this.state) {
+            console.error(vscp.utility.getTime() + " Connection is not authenticated.");
+            reject(Error("Connection is not authenticated."));
+            return;
+        }
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    this._sendCommand({
-        command: "CLOSE",
-        data: "",
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "CLOSE",
+            data: "",
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
@@ -1277,36 +1393,44 @@ vscp.ws.Client.prototype.stop = function(options) {
  * @param {object} options                  - Options
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.clearQueue = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
+        var onSuccess = null;
+        var onError = null;
 
-    if (this.states.AUTHENTICATED !== this.state) {
-        console.error(vscp.utility.getTime() + " Connection is not authenticated.");
-        return;
-    }
+        if (this.states.AUTHENTICATED !== this.state) {
+            console.error(vscp.utility.getTime() + " Connection is not authenticated.");
+            reject(Error("Connection is not authenticated."));
+            return;
+        }
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    this._sendCommand({
-        command: "CLRQ",
-        data: "",
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "CLRQ",
+            data: "",
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
@@ -1316,174 +1440,196 @@ vscp.ws.Client.prototype.clearQueue = function(options) {
  * @param {vscp.Event} options.event        - VSCP event to send
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.sendEvent = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var cmdData = "";
-    var onSuccess = null;
-    var onError = null;
+        var cmdData = "";
+        var onSuccess = null;
+        var onError = null;
 
-    if (this.states.AUTHENTICATED !== this.state) {
-        console.error(vscp.utility.getTime() + " Connection is not authenticated.");
-        return;
-    }
+        if (this.states.AUTHENTICATED !== this.state) {
+            console.error(vscp.utility.getTime() + " Connection is not authenticated.");
+            reject(Error("Connection is not authenticated."));
+            return;
+        }
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("undefined" === typeof options.event) {
-        console.error(vscp.utility.getTime() + " VSCP event is missing.");
-        return;
-    }
+        if ("undefined" === typeof options.event) {
+            console.error(vscp.utility.getTime() + " VSCP event is missing.");
+            reject(Error("VSCP event is missing."));
+            return;
+        }
 
-    if (false === options.event instanceof vscp.Event) {
-        console.error(vscp.utility.getTime() + " Event is invalid.");
-        return;
-    }
+        if (false === options.event instanceof vscp.Event) {
+            console.error(vscp.utility.getTime() + " Event is invalid.");
+            reject(Error("Event is invalid."));
+            return;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    cmdData = options.event.getText();
+        cmdData = options.event.getText();
 
-    this._sendEvent({
-        data: cmdData,
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendEvent({
+            data: cmdData,
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
  * Set a filter in the VSCP server for VSCP events.
  *
  * @param {object} options                          - Options
- * @param {number} [options.filterPriority]         - Priority filter
- * @param {number} [options.filterClass]            - Class filter
- * @param {number} [options.filterType]             - Type filter
- * @param {number[]|string} [options.filterGuid]    - GUID filter
- * @param {number} [options.maskPriority]           - Priority mask
- * @param {number} [options.maskClass]              - Class mask
- * @param {number} [options.maskType]               - Type mask
- * @param {number[]|string} [options.maskGuid]      - GUID mask
+ * @param {number} [options.filterPriority]         - Priority filter (default: 0)
+ * @param {number} [options.filterClass]            - Class filter (default: 0)
+ * @param {number} [options.filterType]             - Type filter (default: 0)
+ * @param {number[]|string} [options.filterGuid]    - GUID filter (default: 0)
+ * @param {number} [options.maskPriority]           - Priority mask (default: 0)
+ * @param {number} [options.maskClass]              - Class mask (default: 0xffff)
+ * @param {number} [options.maskType]               - Type mask (default: 0xffff)
+ * @param {number[]|string} [options.maskGuid]      - GUID mask (default: 0)
  * @param {function} [options.onSuccess]            - Function which is called on a successful operation
  * @param {function} [options.onError]              - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.setFilter = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
-    var cmdData = "";
-    var filterPriority = 0;
-    var filterClass = 0;
-    var filterType = 0;
-    var filterGuid = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    var maskPriority = 0;
-    var maskClass = 0xffff;
-    var maskType = 0xffff;
-    var maskGuid = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var onSuccess = null;
+        var onError = null;
+        var cmdData = "";
+        var filterPriority = 0;
+        var filterClass = 0;
+        var filterType = 0;
+        var filterGuid = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var maskPriority = 0;
+        var maskClass = 0xffff;
+        var maskType = 0xffff;
+        var maskGuid = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    if (this.states.AUTHENTICATED !== this.state) {
-        console.error(vscp.utility.getTime() + " Connection is not authenticated.");
-        return;
-    }
-
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
-
-    if ("number" === typeof options.filterPriority) {
-        filterPriority = options.filterPriority;
-    }
-
-    if ("number" === typeof options.filterClass) {
-        filterClass = options.filterClass;
-    }
-
-    if ("number" === typeof options.filterType) {
-        filterType = options.filterType;
-    }
-
-    if (options.filterGuid instanceof Array) {
-        if (16 !== options.filterGuid.length) {
-            console.error(vscp.utility.getTime() + " GUID filter length is invalid.");
+        if (this.states.AUTHENTICATED !== this.state) {
+            console.error(vscp.utility.getTime() + " Connection is not authenticated.");
+            reject(Error("Connection is not authenticated."));
             return;
         }
 
-        filterGuid = options.filterGuid;
-    } else if ("string" === typeof options.filterGuid) {
-
-        filterGuid = vscp.utility.strToGuid(options.filterGuid);
-
-        if (16 !== filterGuid.length) {
-            console.error(vscp.utility.getTime() + " GUID filter is invalid.");
-            return;
-        }
-    }
-
-    if ("number" === typeof options.maskPriority) {
-        maskPriority = options.maskPriority;
-    }
-
-    if ("number" === typeof options.maskClass) {
-        maskClass = options.maskClass;
-    }
-
-    if ("number" === typeof options.maskType) {
-        maskType = options.maskType;
-    }
-
-    if (options.maskGuid instanceof Array) {
-        if (16 !== options.maskGuid.length) {
-            console.error(vscp.utility.getTime() + " GUID mask length is invalid.");
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
             return;
         }
 
-        maskGuid = options.maskGuid;
-    } else if ("string" === typeof options.maskGuid) {
-
-        maskGuid = vscp.utility.strToGuid(options.maskGuid);
-
-        if (16 !== maskGuid.length) {
-            console.error(vscp.utility.getTime() + " GUID mask is invalid.");
-            return;
+        if ("number" === typeof options.filterPriority) {
+            filterPriority = options.filterPriority;
         }
-    }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("number" === typeof options.filterClass) {
+            filterClass = options.filterClass;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("number" === typeof options.filterType) {
+            filterType = options.filterType;
+        }
 
-    cmdData += "0x" + filterPriority.toString(16) + ",";
-    cmdData += "0x" + filterClass.toString(16) + ",";
-    cmdData += "0x" + filterType.toString(16) + ",";
+        if (options.filterGuid instanceof Array) {
+            if (16 !== options.filterGuid.length) {
+                console.error(vscp.utility.getTime() + " GUID filter length is invalid.");
+                reject(Error("GUID filter length is invalid."));
+                return;
+            }
 
-    cmdData += vscp.utility.guidToStr(filterGuid);
+            filterGuid = options.filterGuid;
+        } else if ("string" === typeof options.filterGuid) {
 
-    cmdData += ";";
-    cmdData += "0x" + maskPriority.toString(16) + ",";
-    cmdData += "0x" + maskClass.toString(16) + ",";
-    cmdData += "0x" + maskType.toString(16) + ",";
+            filterGuid = vscp.utility.strToGuid(options.filterGuid);
 
-    cmdData += vscp.utility.guidToStr(maskGuid);
+            if (16 !== filterGuid.length) {
+                console.error(vscp.utility.getTime() + " GUID filter is invalid.");
+                reject(Error("GUID filter is invalid."));
+                return;
+            }
+        }
 
-    this._sendCommand({
-        command: "SF",
-        data: cmdData,
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        if ("number" === typeof options.maskPriority) {
+            maskPriority = options.maskPriority;
+        }
+
+        if ("number" === typeof options.maskClass) {
+            maskClass = options.maskClass;
+        }
+
+        if ("number" === typeof options.maskType) {
+            maskType = options.maskType;
+        }
+
+        if (options.maskGuid instanceof Array) {
+            if (16 !== options.maskGuid.length) {
+                console.error(vscp.utility.getTime() + " GUID mask length is invalid.");
+                reject(Error("GUID mask length is invalid."));
+                return;
+            }
+
+            maskGuid = options.maskGuid;
+        } else if ("string" === typeof options.maskGuid) {
+
+            maskGuid = vscp.utility.strToGuid(options.maskGuid);
+
+            if (16 !== maskGuid.length) {
+                console.error(vscp.utility.getTime() + " GUID mask is invalid.");
+                reject(Error("GUID mask is invalid."));
+                return;
+            }
+        }
+
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
+
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
+
+        cmdData += "0x" + filterPriority.toString(16) + ",";
+        cmdData += "0x" + filterClass.toString(16) + ",";
+        cmdData += "0x" + filterType.toString(16) + ",";
+
+        cmdData += vscp.utility.guidToStr(filterGuid);
+
+        cmdData += ";";
+        cmdData += "0x" + maskPriority.toString(16) + ",";
+        cmdData += "0x" + maskClass.toString(16) + ",";
+        cmdData += "0x" + maskType.toString(16) + ",";
+
+        cmdData += vscp.utility.guidToStr(maskGuid);
+
+        this._sendCommand({
+            command: "SF",
+            data: cmdData,
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
@@ -1498,89 +1644,99 @@ vscp.ws.Client.prototype.setFilter = function(options) {
  * @param {string} [options.note]               - Variable note (optional)
  * @param {function} [options.onSuccess]        - Function which is called on a successful operation
  * @param {function} [options.onError]          - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.createVar = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
-    var type = vscp.constants.varTypes.STRING;  // Default type is string
-    var accessrights = 744;                     // Default access rights
-    var persistency = false;                    // Not persistent
-    var note = "";                              // No note
-    var value = "";
+        var onSuccess = null;
+        var onError = null;
+        var type = vscp.constants.varTypes.STRING;  // Default type is string
+        var accessrights = 744;                     // Default access rights
+        var persistency = false;                    // Not persistent
+        var note = "";                              // No note
+        var value = "";
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options is missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options is missing.");
+            reject(Error("Options is missing."));
+            return;
+        }
 
-    if ("string" !== typeof options.name) {
-        console.error(vscp.utility.getTime() + " Option 'name' is missing.");
-        return;
-    }
+        if ("string" !== typeof options.name) {
+            console.error(vscp.utility.getTime() + " Option 'name' is missing.");
+            reject(Error("Option 'name' is missing."));
+            return;
+        }
 
-    if ("number" === typeof options.type) {
-        type = options.type;
-    }
+        if ("number" === typeof options.type) {
+            type = options.type;
+        }
 
-    if ("number" === typeof options.accessrights) {
-        accessrights = options.accessrights;
-    }
+        if ("number" === typeof options.accessrights) {
+            accessrights = options.accessrights;
+        }
 
-    if ("string" === typeof options.persistency) {
+        if ("string" === typeof options.persistency) {
 
-        if ('false' === options.persistency.toLowerCase()) {
-            persistency = false;
+            if ('false' === options.persistency.toLowerCase()) {
+                persistency = false;
+            }
+            else {
+                persistency = true;
+            }
+        }
+        else if ("boolean" === typeof options.persistency) {
+            persistency = options.persistency;
         }
         else {
-            persistency = true;
+            console.error(vscp.utility.getTime() + " Option 'persistency' is missing.");
+            reject(Error("Option 'persistency' is missing."));
+            return;
         }
-    }
-    else if ("boolean" === typeof options.persistency) {
-        persistency = options.persistency;
-    }
-    else {
-        console.error(vscp.utility.getTime() + " Option 'persistency' is missing.");
-        return;
-    }
 
-    if ("string" !== typeof options.value) {
-        value = options.value;
-    }
-    else if ("number" !== typeof options.value) {
-        value = options.value.toString();
-    }
-    else if ("boolean" !== typeof options.value) {
-        value = (options.value ? "true" : "false");
-    }
-    else {
-        console.error(vscp.utility.getTime() + " Option 'value' is missing.");
-        return;
-    }
+        if ("string" !== typeof options.value) {
+            value = options.value;
+        }
+        else if ("number" !== typeof options.value) {
+            value = options.value.toString();
+        }
+        else if ("boolean" !== typeof options.value) {
+            value = (options.value ? "true" : "false");
+        }
+        else {
+            console.error(vscp.utility.getTime() + " Option 'value' is missing.");
+            reject(Error("Option 'value' is missing."));
+            return;
+        }
 
-    if ("string" === typeof options.note) {
-        note = options.note;
-    }
+        if ("string" === typeof options.note) {
+            note = options.note;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    this._sendCommand({
-        command: "CVAR",
-        data: options.name + ";" +
-            type + ";" +
-            accessrights + ";" +
-            ( persistency ? 1 : 0 ) + ";" +
-            vscp.encodeValueIfBase64(type, value) + ";" +
-            vscp.b64EncodeUnicode(note),
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "CVAR",
+            data: options.name + ";" +
+                type + ";" +
+                accessrights + ";" +
+                ( persistency ? 1 : 0 ) + ";" +
+                vscp.encodeValueIfBase64(type, value) + ";" +
+                vscp.b64EncodeUnicode(note),
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
@@ -1590,36 +1746,44 @@ vscp.ws.Client.prototype.createVar = function(options) {
  * @param {string} options.name             - Variable name
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.readVar = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
+        var onSuccess = null;
+        var onError = null;
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("string" !== typeof options.name) {
-        console.error(vscp.utility.getTime() + " Variable name is missing.");
-        return;
-    }
+        if ("string" !== typeof options.name) {
+            console.error(vscp.utility.getTime() + " Variable name is missing.");
+            reject(Error("Variable name is missing."));
+            return;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    this._sendCommand({
-        command: "RVAR",
-        data: options.name,
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "RVAR",
+            data: options.name,
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
@@ -1631,56 +1795,66 @@ vscp.ws.Client.prototype.readVar = function(options) {
  * @param {number} options.type             - Variable type
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.writeVar = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
-    var value = "";
+        var onSuccess = null;
+        var onError = null;
+        var value = "";
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options is missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options is missing.");
+            reject(Error("Options is missing."));
+            return;
+        }
 
-    if ("string" !== typeof options.name) {
-        console.error(vscp.utility.getTime() + " Option name is missing.");
-        return;
-    }
+        if ("string" !== typeof options.name) {
+            console.error(vscp.utility.getTime() + " Option name is missing.");
+            reject(Error("Option name is missing."));
+            return;
+        }
 
-    if ("string" !== typeof options.value) {
-        value = options.value;
-    }
-    else if ("number" !== typeof options.value) {
-        value = options.value.toString();
-    }
-    else if ("boolean" !== typeof options.value) {
-        value = (options.value ? "true" : "false");
-    }
-    else {
-        console.error(vscp.utility.getTime() + " Option 'value' is missing.");
-        return;
-    }
+        if ("string" !== typeof options.value) {
+            value = options.value;
+        }
+        else if ("number" !== typeof options.value) {
+            value = options.value.toString();
+        }
+        else if ("boolean" !== typeof options.value) {
+            value = (options.value ? "true" : "false");
+        }
+        else {
+            console.error(vscp.utility.getTime() + " Option 'value' is missing.");
+            reject(Error("Option 'value' is missing."));
+            return;
+        }
 
-    if ("number" !== typeof options.type) {
-        console.error(vscp.utility.getTime() + " Option type is missing.");
-        return;
-    }
+        if ("number" !== typeof options.type) {
+            console.error(vscp.utility.getTime() + " Option type is missing.");
+            reject(Error("Option type is missing."));
+            return;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    this._sendCommand({
-        command: "WVAR",
-        data: options.name + ";" + vscp.encodeValueIfBase64(options.type, value),
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "WVAR",
+            data: options.name + ";" + vscp.encodeValueIfBase64(options.type, value),
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 
@@ -1692,36 +1866,44 @@ vscp.ws.Client.prototype.writeVar = function(options) {
  * @param {string} options.name             - Variable name
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.resetVar = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
+        var onSuccess = null;
+        var onError = null;
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("string" !== typeof options.name) {
-        console.error(vscp.utility.getTime() + " Variable name is missing.");
-        return;
-    }
+        if ("string" !== typeof options.name) {
+            console.error(vscp.utility.getTime() + " Variable name is missing.");
+            reject(Error("Variable name is missing."));
+            return;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    this._sendCommand({
-        command: "RSTVAR",
-        data: options.name,
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "RSTVAR",
+            data: options.name,
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
@@ -1731,36 +1913,44 @@ vscp.ws.Client.prototype.resetVar = function(options) {
  * @param {string} options.name             - Variable name
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.removeVar = function(options) {
+    return new Promise(function(resolve, reject) {
+    
+        var onSuccess = null;
+        var onError = null;
 
-    var onSuccess = null;
-    var onError = null;
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("string" !== typeof options.name) {
+            console.error(vscp.utility.getTime() + " Variable name is missing.");
+            reject(Error("Variable name is missing."));
+            return;
+        }
 
-    if ("string" !== typeof options.name) {
-        console.error(vscp.utility.getTime() + " Variable name is missing.");
-        return;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
-
-    this._sendCommand({
-        command: "DELVAR",
-        data: options.name,
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "DELVAR",
+            data: options.name,
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve, resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
@@ -1770,36 +1960,44 @@ vscp.ws.Client.prototype.removeVar = function(options) {
  * @param {string} options.name             - Variable name
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.lengthVar = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
+        var onSuccess = null;
+        var onError = null;
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("string" !== typeof options.name) {
-        console.error(vscp.utility.getTime() + " Variable name is missing.");
-        return;
-    }
+        if ("string" !== typeof options.name) {
+            console.error(vscp.utility.getTime() + " Variable name is missing.");
+            reject(Error("Variable name is missing."));
+            return;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    this._sendCommand({
-        command: "LENVAR",
-        data: options.name,
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "LENVAR",
+            data: options.name,
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
@@ -1809,36 +2007,44 @@ vscp.ws.Client.prototype.lengthVar = function(options) {
  * @param {string} options.name             - Variable name
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.lastChangeVar = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
+        var onSuccess = null;
+        var onError = null;
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("string" !== typeof options.name) {
-        console.error(vscp.utility.getTime() + " Variable name is missing.");
-        return;
-    }
+        if ("string" !== typeof options.name) {
+            console.error(vscp.utility.getTime() + " Variable name is missing.");
+            reject(Error("Variable name is missing."));
+            return;
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    this._sendCommand({
-        command: "LCVAR",
-        data: options.name,
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "LCVAR",
+            data: options.name,
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 /**
@@ -1849,43 +2055,51 @@ vscp.ws.Client.prototype.lastChangeVar = function(options) {
  * @param {function} options.onVariable     - Function which is called per variable
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.listVar = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
-    var regex = "";
+        var onSuccess = null;
+        var onError = null;
+        var regex = "";
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("string" === typeof options.regex) {
-        regex = options.regex;
-    }
+        if ("string" === typeof options.regex) {
+            regex = options.regex;
+        }
 
-    if ("function" !== typeof options.onVariable) {
-        console.error(vscp.utility.getTime() + " onVariable is missing.");
-        return;
-    }
+        if ("function" !== typeof options.onVariable) {
+            console.error(vscp.utility.getTime() + " onVariable is missing.");
+            reject(Error("onVariable is missing."));
+            return;
+        }
 
-    this.onVariable = options.onVariable;
+        this.onVariable = options.onVariable;
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    this._sendCommand({
-        command: "LSTVAR",
-        data: regex,
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "LSTVAR",
+            data: regex,
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };
 
 
@@ -1900,68 +2114,77 @@ vscp.ws.Client.prototype.listVar = function(options) {
  * @param {function} options.onTableRow     - Function which is called on every received table row
  * @param {function} [options.onSuccess]    - Function which is called on a successful operation
  * @param {function} [options.onError]      - Function which is called on a failed operation
+ * 
+ * @return {object} Promise
  */
 vscp.ws.Client.prototype.readTable = function(options) {
+    return new Promise(function(resolve, reject) {
 
-    var onSuccess = null;
-    var onError = null;
-    var rowBegin = null;
-    var rowEnd = null;
-    var data = "";
+        var onSuccess = null;
+        var onError = null;
+        var rowBegin = null;
+        var rowEnd = null;
+        var data = "";
 
-    if ("undefined" === typeof options) {
-        console.error(vscp.utility.getTime() + " Options are missing.");
-        return;
-    }
+        if ("undefined" === typeof options) {
+            console.error(vscp.utility.getTime() + " Options are missing.");
+            reject(Error("Options are missing."));
+            return;
+        }
 
-    if ("string" !== typeof options.name) {
-        console.error(vscp.utility.getTime() + " Table name is missing.");
-        return;
-    }
+        if ("string" !== typeof options.name) {
+            console.error(vscp.utility.getTime() + " Table name is missing.");
+            reject(Error("Table name is missing."));
+            return;
+        }
 
-    if ("function" !== typeof options.onTableRow) {
-        console.error(vscp.utility.getTime() + " onTableRow function is missing.");
-        return;
-    }
+        if ("function" !== typeof options.onTableRow) {
+            console.error(vscp.utility.getTime() + " onTableRow function is missing.");
+            reject(Error("onTableRow function is missing."));
+            return;
+        }
 
-    this.onTableRow = options.onTableRow;
+        this.onTableRow = options.onTableRow;
 
-    if ("string" === typeof options.begin) {
-        rowBegin = options.begin;
-    }
-    else if (true === (options.begin instanceof Date)) {
-        rowBegin = options.begin.toISOString()
-    }
+        if ("string" === typeof options.begin) {
+            rowBegin = options.begin;
+        }
+        else if (true === (options.begin instanceof Date)) {
+            rowBegin = options.begin.toISOString()
+        }
 
-    if ("string" === typeof options.end) {
-        rowEnd = options.end;
-    }
-    else if (true === (options.end instanceof Date)) {
-        rowEnd = options.begin.toISOString()
-    }
+        if ("string" === typeof options.end) {
+            rowEnd = options.end;
+        }
+        else if (true === (options.end instanceof Date)) {
+            rowEnd = options.begin.toISOString()
+        }
 
-    if ("function" === typeof options.onSuccess) {
-        onSuccess = options.onSuccess;
-    }
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
 
-    if ("function" === typeof options.onError) {
-        onError = options.onError;
-    }
+        if ("function" === typeof options.onError) {
+            onError = options.onError;
+        }
 
-    data = options.name;
+        data = options.name;
 
-    if ((null !== rowBegin) &&
-        (null !== rowEnd)) {
+        if ((null !== rowBegin) &&
+            (null !== rowEnd)) {
 
-        data += ";" + rowBegin + ";" + rowEnd;
-    } else {
-        data += ";;";
-    }
+            data += ";" + rowBegin + ";" + rowEnd;
+        } else {
+            data += ";;";
+        }
 
-    this._sendCommand({
-        command: "TBL_GET",
-        data: data,
-        onSuccess: onSuccess,
-        onError: onError
-    });
+        this._sendCommand({
+            command: "TBL_GET",
+            data: data,
+            onSuccess: onSuccess,
+            onError: onError,
+            resolve: resolve,
+            reject: reject
+        });
+    }.bind(this));
 };

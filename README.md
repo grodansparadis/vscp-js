@@ -31,9 +31,12 @@ Include the following javascript files to your HTML:
 <script type="text/javascript" src="js/vscp-js/vscpws.js"></script>
 ```
 
-The websocket API supports only callbacks to master the asynchronous communication. If you like native promises, you have to wrap them around by yourself. Promises may be supported in the future as well, similar to the REST API.
+The websocket API supports callbacks and Promise to handle the asynchronous communication.
+Only the first two of the following examples will shows both possibilities. All others continoue using promises.
 
 #### Open connection
+
+Example using callbacks:
 
 ``` javascript
 var vscpClient = new vscp.ws.Client();
@@ -53,12 +56,44 @@ vscpClient.connect({
 });
 ```
 
-Note, the websocket API doesn't support native promises yet, as the REST client API.
+Example using native promises:
+
+``` javascript
+var vscpClient = new vscp.ws.Client();
+
+vscpClient.connect({
+    url: "ws://localhost:8884/ws1",
+    userName: "admin",
+    password: "secret",
+    vscpkey: "A4A86F7D7E119BA3F0CD06881E371B989B33B6D606A863B633EF529D64544F8E",
+    authdomain: "mydomain.com"
+})
+.then(function() {
+    // Implement your code here ...
+})
+.catch(function() {
+    // Implement your code here ...
+});
+```
 
 #### Close connection
 
+Example using callbacks:
+
 ``` javascript
 vscpClient.disconnect();
+```
+
+Example using native promises:
+
+``` javascript
+vscpClient.disconnect()
+.then(function() {
+    // Implement your code here ...
+})
+.catch(function() {
+    // Implement your code here ...
+});
 ```
 
 #### Send events
@@ -70,16 +105,17 @@ vscpClient.sendEvent({
         vscpType:       vscp.constants.types.VSCP_TYPE_CONTROL_TURNON,
         vscpPriority:   vscp.constants.priorities.PRIORITY_3_NORMAL,
         vscpData:       [ 0, 1, 12 ]
-    }),
+    })
+})
+.then(function() {
+    console.info("TURNON event sent.");
 
-    onSuccess: function(client) {
-        console.info("TURNON event sent.");
-    },
+    // Implement your code here ...
+})
+.catch(function() {
+    console.error("Failed to send TURNON event.");
 
-    onError: function(client) {
-        console.error("Failed to send TURNON event.");
-    }
-
+    // Implement your code here ...
 });
 ```
 
@@ -102,15 +138,16 @@ In the second step, start listening.
 
 ``` javascript
 // Start receiving VSCP events
-vscpClient.start({
+vscpClient.start()
+.then(function() {
+    console.info("Receiving VSCP events started.");
 
-    onSuccess: function(client) {
-        console.info("Receiving VSCP events started.");
-    },
+    // Implement your code here ...
+})
+.catch(function() {
+    console.error("Failed to start receiving VSCP events.");
 
-    onError: function(client) {
-        console.error("Failed to start receiving VSCP events.");
-    }
+    // Implement your code here ...
 });
 ```
 
@@ -126,7 +163,7 @@ Include the following javascript files to your HTML:
 <script type="text/javascript" src="js/vscp-js/vscprest.js"></script>
 ```
 
-The REST API supports callbacks and native promises to master the asynchronous communication.
+The websocket API supports callbacks and Promise to handle the asynchronous communication.
 Only the first two of the following examples will shows both possibilities. All others continoue using promises.
 
 #### Open connection
