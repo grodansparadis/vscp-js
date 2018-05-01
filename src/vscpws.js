@@ -1252,7 +1252,7 @@ vscp.ws.Client.prototype.connect = function(options) {
             this.onConnError = null;
             this.onMessage = null;
 
-            reject(Error("Couldn't open a websocket connection."));
+            reject(this, Error("Couldn't open a websocket connection."));
         } else {
 
             this._sendCommand({
@@ -1275,14 +1275,31 @@ vscp.ws.Client.prototype.connect = function(options) {
 /**
  * Disconnect from a VSCP server.
  * 
+ * @param {object} options                  - Options
+ * @param {function} [options.onSuccess]    - Function which is called on a successful disconnection.
  * @return {object} Promise
  */
-vscp.ws.Client.prototype.disconnect = function() {
+vscp.ws.Client.prototype.disconnect = function(options) {
     /* eslint-disable no-unused-vars */
     return new Promise(function(resolve, reject) {
     /* eslint-enable no-unused-vars */
 
+        var onSuccess = null;
+
         console.info(vscp.utility.getTime() + " Disconnect websocket connection.");
+
+        if ("function" === typeof options.onSuccess) {
+            onSuccess = options.onSuccess;
+        }
+
+        this._sendCommand({
+            command: "FUNCTION_DISCONNECT",
+            simulate: true,
+            onSuccess: onSuccess,
+            onError: null,
+            resolve: resolve,
+            reject: reject
+        });
 
         if (null !== this.socket) {
             this.onConnError = null;
@@ -1295,7 +1312,8 @@ vscp.ws.Client.prototype.disconnect = function() {
             this.cmdQueue = [];
         }
 
-        resolve();
+        this._signalSuccess("FUNCTION_DISCONNECT");
+
     }.bind(this));
 };
 
