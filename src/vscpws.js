@@ -229,7 +229,7 @@ vscp.ws.Client = function() {
      *
      * @return {number} Index of command in the queue. If index is < 0, the command was not found.
      */
-    var getPendingCommandIndex = function(command) {
+    this._getPendingCommandIndex = function(command) {
 
         var index = 0;
 
@@ -253,9 +253,9 @@ vscp.ws.Client = function() {
      *
      * @return {Command} Command object
      */
-    this.getPendingCommand = function(command) {
+    this._getPendingCommand = function(command) {
 
-        var index = getPendingCommandIndex(command);
+        var index = this._getPendingCommandIndex(command);
         var cmd = null;
 
         if (0 <= index) {
@@ -403,9 +403,9 @@ vscp.ws.Client = function() {
      * @param {string} command  - Server command string
      * @param {object} [obj]    - Options for on success callback
      */
-    this.signalSuccess = function(command, obj) {
+    this._signalSuccess = function(command, obj) {
 
-        var cmd = this.getPendingCommand(command);
+        var cmd = this._getPendingCommand(command);
 
         if (null !== cmd) {
 
@@ -442,9 +442,9 @@ vscp.ws.Client = function() {
      * @param {string} command  - Server command string
      * @param {object} [obj]    - Options for on error callback
      */
-    this.signalError = function(command, obj) {
+    this._signalError = function(command, obj) {
 
-        var cmd = this.getPendingCommand(command);
+        var cmd = this._getPendingCommand(command);
 
         if (null !== cmd) {
 
@@ -479,7 +479,7 @@ vscp.ws.Client = function() {
      * 
      * @private
      */
-    this.signalConnError = function() {
+    this._signalConnError = function() {
         if (("function" === typeof this.onConnError) &&
             (null !== this.onConnError)) {
             this.onConnError(this);
@@ -497,7 +497,7 @@ vscp.ws.Client = function() {
      * 
      * @return {boolean} Message is handled (true) or not (false).
      */
-    this.signalMessage = function(msg) {
+    this._signalMessage = function(msg) {
         var status = false;
 
         if (("function" === typeof this.onMessage) &&
@@ -517,7 +517,7 @@ vscp.ws.Client = function() {
      * @private
      * @param {vscp.Event} vscpEvent - VSCP event
      */
-    this.signalEvent = function(vscpEvent) {
+    this._signalEvent = function(vscpEvent) {
         var index = 0;
 
         /* Signal event to all event listeners */
@@ -540,7 +540,7 @@ vscp.ws.Client = function() {
      * @param {boolean} variable.persistency    - Variable is persistent (true) or not (false)
      * @param {string} variable.value           - Variable value
      */
-    this.signalVariable = function(variable) {
+    this._signalVariable = function(variable) {
         if (("function" === typeof this.onVariable) &&
             (null !== this.onVariable)) {
             this.onVariable(this, variable);
@@ -555,7 +555,7 @@ vscp.ws.Client = function() {
      * @param {string} row.date     - Date and time
      * @param {string} row.value    - Value
      */
-    this.signalTableRow = function(row) {
+    this._signalTableRow = function(row) {
         if (("function" === typeof this.onTableRow) &&
             (null !== this.onTableRow)) {
             this.onTableRow(this, row);
@@ -625,10 +625,10 @@ vscp.ws.Client = function() {
      * @private
      * @member {object}
      */
-    this.webSocketMessages = [{
+    this._webSocketMessages = [{
         event: "AUTH0",
         onSuccess: function(client, parameter) {
-            var cmd = client.getPendingCommand("CHALLENGE");
+            var cmd = client._getPendingCommand("CHALLENGE");
     
             if (null !== cmd) {
     
@@ -653,12 +653,12 @@ vscp.ws.Client = function() {
             /* eslint-disable no-unused-vars */
         onError: function(client, parameter) {
             /* eslint-enable no-unused-vars */
-            var cmd = client.getPendingCommand("FUNCTION_CONNECT");
+            var cmd = client._getPendingCommand("FUNCTION_CONNECT");
     
             console.error(vscp.utility.getTime() + " Authentication initiation aborted.");
     
             if (null !== cmd) {
-                client.signalConnError();
+                client._signalConnError();
                 client.socket.close();
             } else {
                 console.error(vscp.utility.getTime() + " AUTH0 negative reply received, but no challenge is pending!?");
@@ -673,7 +673,7 @@ vscp.ws.Client = function() {
     }, {
         event: "AUTH",
         onSuccess: function(client, parameter) {
-            var cmd = client.getPendingCommand("CHALLENGE");
+            var cmd = client._getPendingCommand("CHALLENGE");
     
             if (null !== cmd) {
     
@@ -699,7 +699,7 @@ vscp.ws.Client = function() {
     }, {
         event: "AUTH1",
         onSuccess: function(client, parameter) {
-            var cmd = client.getPendingCommand("AUTH");
+            var cmd = client._getPendingCommand("AUTH");
     
             if (null !== cmd) {
                 console.info(vscp.utility.getTime() + " Authentication successful.");
@@ -714,7 +714,7 @@ vscp.ws.Client = function() {
 
                 if (client.states.CONNECTED === client.state) {
                     client.state = client.states.AUTHENTICATED;
-                    client.signalSuccess("FUNCTION_CONNECT");
+                    client._signalSuccess("FUNCTION_CONNECT");
                 }
             }
 
@@ -723,12 +723,12 @@ vscp.ws.Client = function() {
             /* eslint-disable no-unused-vars */
         onError: function(client, parameter) {
             /* eslint-enable no-unused-vars */
-            var cmd = client.getPendingCommand("FUNCTION_CONNECT");
+            var cmd = client._getPendingCommand("FUNCTION_CONNECT");
     
             console.error(vscp.utility.getTime() + " Authentication failed.");
     
             if (null !== cmd) {
-                client.signalConnError();
+                client._signalConnError();
                 client.socket.close();
             } else {
                 console.error(vscp.utility.getTime() + " AUTH1 negative reply received, but no challenge is pending!?");
@@ -745,13 +745,13 @@ vscp.ws.Client = function() {
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Receiving events started.");
             client.substate = client.substates.OPEN;
-            client.signalSuccess(parameter[1]);
+            client._signalSuccess(parameter[1]);
 
             return;
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Receiving events couldn't be started.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -765,11 +765,11 @@ vscp.ws.Client = function() {
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Receiving events stopped.");
             client.substate = client.substates.CLOSE;
-            client.signalSuccess(parameter[1]);
+            client._signalSuccess(parameter[1]);
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Receiving events couldn't be stopped.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -780,11 +780,11 @@ vscp.ws.Client = function() {
         event: "CLRQ",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " VSCP event queue cleared.");
-            client.signalSuccess(parameter[1]);
+            client._signalSuccess(parameter[1]);
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " VSCP event queue couldn't be cleared.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -795,11 +795,11 @@ vscp.ws.Client = function() {
         event: "EVENT",
         onSuccess: function(client, parameter) {
             //console.info( vscp.utility.getTime() + " VSCP event successful sent." );
-            client.signalSuccess(parameter[1]);
+            client._signalSuccess(parameter[1]);
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Failed to send VSCP event.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -810,11 +810,11 @@ vscp.ws.Client = function() {
         event: "SF",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Filter successfully set.");
-            client.signalSuccess(parameter[1]);
+            client._signalSuccess(parameter[1]);
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Filter couldn't bet set.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -825,7 +825,7 @@ vscp.ws.Client = function() {
         event: "RVAR",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Variable " + parameter[2] + " (" + parameter[4] + ") successful read.");
-            client.signalSuccess(
+            client._signalSuccess(
                 parameter[1], {
                     // name;type;userid;accessright,bPersistent;userid;rights;lastchanged;value;note
                     name: parameter[2], // Variable name
@@ -841,7 +841,7 @@ vscp.ws.Client = function() {
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Variable couldn't be read.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -852,7 +852,7 @@ vscp.ws.Client = function() {
         event: "WVAR",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Variable successfully written.");
-            client.signalSuccess(
+            client._signalSuccess(
                 parameter[1], {
                     name: parameter[2], // Variable name
                     type: parseInt(parameter[3]), // Variable type
@@ -862,7 +862,7 @@ vscp.ws.Client = function() {
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Variable couldn't be written.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -873,11 +873,11 @@ vscp.ws.Client = function() {
         event: "CVAR",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Variable successfully created.");
-            client.signalSuccess(parameter[1]);
+            client._signalSuccess(parameter[1]);
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Variable couldn't be created.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -888,7 +888,7 @@ vscp.ws.Client = function() {
         event: "RSTVAR",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Variable successfully reset.");
-            client.signalSuccess(
+            client._signalSuccess(
                 parameter[1], {
                     name: parameter[2], // Variable name
                     type: parameter[3], // Variable type
@@ -898,7 +898,7 @@ vscp.ws.Client = function() {
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Variable couldn't be reset.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -909,7 +909,7 @@ vscp.ws.Client = function() {
         event: "DELVAR",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Variable successfully removed.");
-            client.signalSuccess(
+            client._signalSuccess(
                 parameter[1], {
                     name: parameter[2] // Variable name
                 }
@@ -917,7 +917,7 @@ vscp.ws.Client = function() {
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Variable couldn't be removed.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -928,7 +928,7 @@ vscp.ws.Client = function() {
         event: "LENVAR",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Variable length successfully read.");
-            client.signalSuccess(
+            client._signalSuccess(
                 parameter[1], {
                     name: parameter[2], // Variable name
                     length: parseInt(parameter[3]) // Variable length
@@ -937,7 +937,7 @@ vscp.ws.Client = function() {
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Variable length couldn't be read.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -948,7 +948,7 @@ vscp.ws.Client = function() {
         event: "LCVAR",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Variable last change successfully read.");
-            client.signalSuccess(
+            client._signalSuccess(
                 parameter[1], {
                     name: parameter[2], // Variable name
                     lastChange: parameter[3] // Variable last changed
@@ -957,7 +957,7 @@ vscp.ws.Client = function() {
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Variable last change couldn't be read.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -968,8 +968,8 @@ vscp.ws.Client = function() {
         event: "LSTVAR",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Variable successfully listed.");
-            client.signalSuccess(parameter[1]);
-            client.signalVariable({
+            client._signalSuccess(parameter[1]);
+            client._signalVariable({
                 // +;LSTVAR;ordinal;count;name;type;userid;accessrights;persistance;last_change
                 idx: parseInt(parameter[2]), // Ordinal
                 count: parseInt(parameter[3]), // Total # variables
@@ -983,7 +983,7 @@ vscp.ws.Client = function() {
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Variables couldn't be listed.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -994,7 +994,7 @@ vscp.ws.Client = function() {
         event: "TBL_GET",
         onSuccess: function(client, parameter) {
             console.info(vscp.utility.getTime() + " Table successfully read.");
-            client.signalSuccess(
+            client._signalSuccess(
                 parameter[1], {
                     count: parseInt(parameter[2]) // Number of rows that will follow via TR
                 }
@@ -1002,7 +1002,7 @@ vscp.ws.Client = function() {
         },
         onError: function(client, parameter) {
             console.error(vscp.utility.getTime() + " Table couldn't be read.");
-            client.signalError(
+            client._signalError(
                 parameter[1], {
                     id: parseInt(parameter[2]), // Error code
                     str: parameter[3] // Error string
@@ -1012,7 +1012,7 @@ vscp.ws.Client = function() {
     }, {
         event: "TR",
         onSuccess: function(client, parameter) {
-            client.signalTableRow({
+            client._signalTableRow({
                 date: parameter[2], // Date and time
                 value: parameter[3] // Value
             });
@@ -1052,7 +1052,7 @@ vscp.ws.Client.prototype.onWebSocketClose = function() {
 
     console.info(vscp.utility.getTime() + " Websocket connection closed.");
     this.state = this.states.DISCONNECTED;
-    this.signalConnError();
+    this._signalConnError();
 };
 
 /**
@@ -1073,7 +1073,7 @@ vscp.ws.Client.prototype.onWebSocketMessage = function(msg) {
     /* Send message to application. If the application handled the message,
      * nothing more to. Otherwise the message will be handled now.
      */
-    if (false === this.signalMessage(msg)) {
+    if (false === this._signalMessage(msg)) {
 
         // Command response?
         if (("+" === msgItems[0]) || 
@@ -1081,22 +1081,22 @@ vscp.ws.Client.prototype.onWebSocketMessage = function(msg) {
 
             // Find response parser
             index = 0;
-            while(this.webSocketMessages[index].event !== msgItems[1]) {
+            while(this._webSocketMessages[index].event !== msgItems[1]) {
                 ++index;
             }
         
             // Found?
-            if (this.webSocketMessages.length > index) {
+            if (this._webSocketMessages.length > index) {
         
                 // Positive response?
                 if ("+" === msgItems[0]) {
-                    if ("function" === typeof this.webSocketMessages[index].onSuccess) {
-                        this.webSocketMessages[index].onSuccess(this, msgItems);
+                    if ("function" === typeof this._webSocketMessages[index].onSuccess) {
+                        this._webSocketMessages[index].onSuccess(this, msgItems);
                     }
                 } else if ("-" === msgItems[0]) {
                     // Negative response
-                    if ("function" === typeof this.webSocketMessages[index].onError) {
-                        this.webSocketMessages[index].onError(this, msgItems);
+                    if ("function" === typeof this._webSocketMessages[index].onError) {
+                        this._webSocketMessages[index].onError(this, msgItems);
                     }
                 } else {
                     // Unknown response
@@ -1143,7 +1143,7 @@ vscp.ws.Client.prototype.onWebSocketMessage = function(msg) {
                 " PRIORITY = " + evt.getPriority() +
                 " DATA = " + evt.vscpData);
 
-            this.signalEvent(evt);
+            this._signalEvent(evt);
         }
     }
 
@@ -1247,7 +1247,7 @@ vscp.ws.Client.prototype.connect = function(options) {
             console.error(vscp.utility.getTime() +
                 " Couldn't open a websocket connection.");
 
-            this.signalConnError();
+            this._signalConnError();
 
             this.onConnError = null;
             this.onMessage = null;
