@@ -40,7 +40,7 @@
  */
 var vscp = vscp || {};
 
-/** VSCP websocket library version
+/** VSCP core javascript library version
  * @property {number} major - Major version number
  * @property {number} minor - Minor version number
  * @property {number} patch - Sub-minor version number
