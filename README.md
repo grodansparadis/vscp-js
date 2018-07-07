@@ -22,11 +22,15 @@ Note, the submodule is not automatically updated with a ```git pull```, you have
 ### Websocket interface
 
 Include the following javascript files to your HTML:
-``` javascript
+``` html
 <!-- VSCP websocket authentication encryption/decryption -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/aes-js/3.1.0/index.min.js"></script>
 <!-- VSCP common core library -->
 <script type="text/javascript" src="js/vscp-js/vscp.js"></script>
+<!-- VSCP class definitions -->
+<script type="text/javascript" src="js/vscp-js/vscp_class.js"></script>
+<!-- VSCP type definitions -->
+<script type="text/javascript" src="js/vscp-js/vscp_type.js"></script>
 <!-- VSCP websocket client library -->
 <script type="text/javascript" src="js/vscp-js/vscpws.js"></script>
 ```
