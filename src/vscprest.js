@@ -606,11 +606,10 @@ vscp.rest.Client = function(config) {
 
                             // Convert REST jsonp event format to vscp.Event format
                             for (index = 0; index < data.response.count; ++index) {
-                                
                                 event = new vscp.Event({
                                     vscpHead: data.response.event[index].head,
-                                    vscpClass: data.response.event[index].vscpclass,
-                                    vscpType: data.response.event[index].vscptype,
+                                    vscpClass: data.response.event[index].vscpClass,
+                                    vscpType: data.response.event[index].vscpType,
                                     vscpObId: data.response.event[index].obid,
                                     vscpTimeStamp: data.response.event[index].timestamp,
                                     vscpDateTime: new Date(data.response.event[index].datetime),
@@ -646,8 +645,8 @@ vscp.rest.Client = function(config) {
                             for (index = 0; index < data.response.count; ++index) {
                                 event = new vscp.Event({
                                     vscpHead: data.response.event[index].head,
-                                    vscpClass: data.response.event[index].vscpclass,
-                                    vscpType: data.response.event[index].vscptype,
+                                    vscpClass: data.response.event[index].vscpClass,
+                                    vscpType: data.response.event[index].vscpType,
                                     vscpObId: data.response.event[index].obid,
                                     vscpTimeStamp: data.response.event[index].timestamp,
                                     vscpDateTime: new Date(data.response.event[index].datetime),
