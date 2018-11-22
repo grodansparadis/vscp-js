@@ -424,26 +424,7 @@ vscp.b64DecodeUnicode = function(str) {
  * @return {bool} Stored base64 encoded (true) or not (false).
  */
 vscp.isBase64Type = function(type) {
-    switch (Number(type)) {
-        case vscp.constants.varTypes.STRING:
-        case vscp.constants.varTypes.BLOB:
-        case vscp.constants.varTypes.MIME:
-        case vscp.constants.varTypes.HTML:
-        case vscp.constants.varTypes.JAVASCIPT:
-        case vscp.constants.varTypes.JSON:
-        case vscp.constants.varTypes.XML:
-        case vscp.constants.varTypes.SQL:
-        case vscp.constants.varTypes.LUA:
-        case vscp.constants.varTypes.LUARES:
-        case vscp.constants.varTypes.UXTYPE1:
-        case vscp.constants.varTypes.DMROW:
-        case vscp.constants.varTypes.DRIVER:
-        case vscp.constants.varTypes.USER:
-        case vscp.constants.varTypes.FILTER:
-            return true;
-    }
-
-    return false;
+    return true;
 };
 
 /** Decode the value if its base64 encoded.
