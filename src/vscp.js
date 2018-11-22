@@ -424,6 +424,7 @@ vscp.b64DecodeUnicode = function(str) {
  * @return {bool} Stored base64 encoded (true) or not (false).
  */
 vscp.isBase64Type = function(type) {
+    type=type;  // To get rid of Travis complaint
     return true;
 };
 
