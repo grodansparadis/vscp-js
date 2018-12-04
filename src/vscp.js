@@ -423,10 +423,9 @@ vscp.b64DecodeUnicode = function(str) {
  * @param {number} type - Variable type numerical code
  * @return {bool} Stored base64 encoded (true) or not (false).
  */
+/* eslint-disable no-unused-vars */
 vscp.isBase64Type = function(type) {
-    if ( type === null) {
-        return true;
-    }
+/* eslint-enable no-unused-vars */
 
     return true;
 };
