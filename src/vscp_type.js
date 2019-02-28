@@ -55,7 +55,7 @@ vscp.constants.types = {
 
     VSCP_TYPE_UNDEFINED: 0,
 
-//  CLASS1.PROTOCOL = 0  -  VSCP Protocol Functionality
+    //  CLASS1.PROTOCOL = 0  -  VSCP Protocol Functionality
     VSCP_TYPE_PROTOCOL_GENERAL: 0,
     VSCP_TYPE_PROTOCOL_SEGCTRL_HEARTBEAT: 1,
     VSCP_TYPE_PROTOCOL_NEW_NODE_ONLINE: 2,
@@ -103,7 +103,7 @@ vscp.constants.types = {
     VSCP_TYPE_PROTOCOL_START_BLOCK_ACK: 50,
     VSCP_TYPE_PROTOCOL_START_BLOCK_NACK: 51,
  
-//  CLASS1.ALARM = 1  -  Alarm functionality
+    //  CLASS1.ALARM = 1  -  Alarm functionality
     VSCP_TYPE_ALARM_GENERAL: 0,
     VSCP_TYPE_ALARM_WARNING: 1,
     VSCP_TYPE_ALARM_ALARM: 2,
@@ -117,7 +117,7 @@ vscp.constants.types = {
     VSCP_TYPE_ALARM_ARM: 10,
     VSCP_TYPE_ALARM_DISARM: 11,
  
-//  CLASS1.SECURITY = 2  -  Security
+    //  CLASS1.SECURITY = 2  -  Security
     VSCP_TYPE_SECURITY_GENERAL: 0,
     VSCP_TYPE_SECURITY_MOTION: 1,
     VSCP_TYPE_SECURITY_GLASS_BREAK: 2,
@@ -140,7 +140,7 @@ vscp.constants.types = {
     VSCP_TYPE_SECURITY_HARMFUL_SOUND_LEVEL: 19,
     VSCP_TYPE_SECURITY_TAMPER: 20,
  
-//  CLASS1.MEASUREMENT = 10  -  Measurement
+    //  CLASS1.MEASUREMENT = 10  -  Measurement
     VSCP_TYPE_MEASUREMENT_GENERAL: 0,
     VSCP_TYPE_MEASUREMENT_COUNT: 1,
     VSCP_TYPE_MEASUREMENT_LENGTH: 2,
@@ -203,7 +203,7 @@ vscp.constants.types = {
     VSCP_TYPE_MEASUREMENT_SOUND_DENSITY: 59,
     VSCP_TYPE_MEASUREMENT_SOUND_LEVEL: 60,
  
-//  CLASS1.DATA = 15  -  Data
+    //  CLASS1.DATA = 15  -  Data
     VSCP_TYPE_DATA_GENERAL: 0,
     VSCP_TYPE_DATA_IO: 1,
     VSCP_TYPE_DATA_AD: 2,
@@ -213,7 +213,7 @@ vscp.constants.types = {
     VSCP_TYPE_DATA_SIGNAL_QUALITY: 6,
     VSCP_TYPE_DATA_COUNT: 7,
  
-//  CLASS1.INFORMATION = 20  -  Information
+    //  CLASS1.INFORMATION = 20  -  Information
     VSCP_TYPE_INFORMATION_GENERAL: 0,
     VSCP_TYPE_INFORMATION_BUTTON: 1,
     VSCP_TYPE_INFORMATION_MOUSE: 2,
@@ -295,7 +295,7 @@ vscp.constants.types = {
     VSCP_TYPE_INFORMATION_RISING: 78,
     VSCP_TYPE_INFORMATION_FALLING: 79,
  
-//  CLASS1.CONTROL = 30  -  Control
+    //  CLASS1.CONTROL = 30  -  Control
     VSCP_TYPE_CONTROL_GENERAL: 0,
     VSCP_TYPE_CONTROL_MUTE: 1,
     VSCP_TYPE_CONTROL_ALL_LAMPS: 2,
@@ -341,7 +341,7 @@ vscp.constants.types = {
     VSCP_TYPE_CONTROL_LOCK: 42,
     VSCP_TYPE_CONTROL_UNLOCK: 43,
  
-//  CLASS1.MULTIMEDIA = 40  -  Multimedia
+    //  CLASS1.MULTIMEDIA = 40  -  Multimedia
     VSCP_TYPE_MULTIMEDIA_GENERAL: 0,
     VSCP_TYPE_MULTIMEDIA_PLAYBACK: 1,
     VSCP_TYPE_MULTIMEDIA_NAVIGATOR_KEY_ENG: 2,
@@ -383,7 +383,7 @@ vscp.constants.types = {
     VSCP_TYPE_MULTIMEDIA_CONTROL: 60,
     VSCP_TYPE_MULTIMEDIA_CONTROL_RESPONSE: 61,
  
-//  CLASS1.AOL = 50  -  Alert On LAN
+    //  CLASS1.AOL = 50  -  Alert On LAN
     VSCP_TYPE_AOL_GENERAL: 0,
     VSCP_TYPE_AOL_UNPLUGGED_POWER: 1,
     VSCP_TYPE_AOL_UNPLUGGED_LAN: 2,
@@ -402,19 +402,19 @@ vscp.constants.types = {
     VSCP_TYPE_AOL_UPDATE_BIOS_IMAGE: 15,
     VSCP_TYPE_AOL_UPDATE_DIAGNOSTIC_PROCEDURE: 16,
  
-//  CLASS1.MEASUREMENT64 = 60  -  Double precision floating point measurement
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS1.MEASUREZONE = 65  -  Measurement with zone
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS1.MEASUREMENT32 = 70  -  Single precision floating point measurement
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS1.SETVALUEZONE = 85  -  Set value with zone
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS1.WEATHER = 90  -  Weather
+    //  CLASS1.MEASUREMENT64 = 60  -  Double precision floating point measurement
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS1.MEASUREZONE = 65  -  Measurement with zone
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS1.MEASUREMENT32 = 70  -  Single precision floating point measurement
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS1.SETVALUEZONE = 85  -  Set value with zone
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS1.WEATHER = 90  -  Weather
     VSCP_TYPE_WEATHER_GENERAL: 0,
     VSCP_TYPE_WEATHER_SEASONS_WINTER: 1,
     VSCP_TYPE_WEATHER_SEASONS_SPRING: 2,
@@ -468,10 +468,10 @@ vscp.constants.types = {
     VSCP_TYPE_WEATHER_WARNING_LEVEL5: 50,
     VSCP_TYPE_WEATHER_ARMAGEDON: 51,
  
-//  CLASS1.WEATHER_FORECAST = 95  -  Weather forecast
-// Event types is the same as  CLASS1.WEATHER = 90  -  Weather
- 
-//  CLASS1.PHONE = 100  -  Phone
+    //  CLASS1.WEATHER_FORECAST = 95  -  Weather forecast
+    // Event types is the same as  CLASS1.WEATHER = 90  -  Weather
+    
+    //  CLASS1.PHONE = 100  -  Phone
     VSCP_TYPE_PHONE_GENERAL: 0,
     VSCP_TYPE_PHONE_INCOMING_CALL: 1,
     VSCP_TYPE_PHONE_OUTGOING_CALL: 2,
@@ -482,7 +482,7 @@ vscp.constants.types = {
     VSCP_TYPE_PHONE_TRANSFER: 7,
     VSCP_TYPE_PHONE_DATABASE_INFO: 8,
  
-//  CLASS1.DISPLAY = 102  -  Display
+    //  CLASS1.DISPLAY = 102  -  Display
     VSCP_TYPE_DISPLAY_GENERAL: 0,
     VSCP_TYPE_DISPLAY_CLEAR_DISPLAY: 1,
     VSCP_TYPE_DISPLAY_POSITION_CURSOR: 2,
@@ -494,7 +494,7 @@ vscp.constants.types = {
     VSCP_TYPE_DISPLAY_SHOW_LED: 48,
     VSCP_TYPE_DISPLAY_SHOW_LED_COLOR: 49,
  
-//  CLASS1.IR = 110  -  IR Remote I/f
+    //  CLASS1.IR = 110  -  IR Remote I/f
     VSCP_TYPE_REMOTE_GENERAL: 0,
     VSCP_TYPE_REMOTE_RC5: 1,
     VSCP_TYPE_REMOTE_SONY12: 3,
@@ -502,16 +502,16 @@ vscp.constants.types = {
     VSCP_TYPE_REMOTE_VSCP: 48,
     VSCP_TYPE_REMOTE_MAPITO: 49,
  
-//  CLASS1.GNSS = 206  -  Position (GNSS)
+    //  CLASS1.GNSS = 206  -  Position (GNSS)
     VSCP_TYPE_GNSS_GENERAL: 0,
     VSCP_TYPE_GNSS_POSITION: 1,
     VSCP_TYPE_GNSS_SATELLITES: 2,
  
-//  CLASS1.WIRELESS = 212  -  Wireless
+    //  CLASS1.WIRELESS = 212  -  Wireless
     VSCP_TYPE_WIRELESS_GENERAL: 0,
     VSCP_TYPE_WIRELESS_GSM_CELL: 1,
  
-//  CLASS1.DIAGNOSTIC = 506  -  Diagnostic
+    //  CLASS1.DIAGNOSTIC = 506  -  Diagnostic
     VSCP_TYPE_DIAGNOSTIC_GENERAL: 0,
     VSCP_TYPE_DIAGNOSTIC_OVERVOLTAGE: 1,
     VSCP_TYPE_DIAGNOSTIC_UNDERVOLTAGE: 2,
@@ -593,7 +593,7 @@ vscp.constants.types = {
     VSCP_TYPE_DIAGNOSTIC_RX_FAIL: 78,
     VSCP_TYPE_DIAGNOSTIC_EXT_IC_FAIL: 79,
  
-//  CLASS1.ERROR = 508  -  Error
+    //  CLASS1.ERROR = 508  -  Error
     VSCP_TYPE_ERROR_SUCCESS: 0,
     VSCP_TYPE_ERROR_ERROR: 1,
     VSCP_TYPE_ERROR_CHANNEL: 7,
@@ -630,95 +630,95 @@ vscp.constants.types = {
     VSCP_TYPE_ERROR_ITEM_UNKNOWN: 44,
     VSCP_TYPE_ERROR_NAME_USED: 45,
  
-//  CLASS1.LOG = 509  -  Logging
+    //  CLASS1.LOG = 509  -  Logging
     VSCP_TYPE_LOG_GENERAL: 0,
     VSCP_TYPE_LOG_MESSAGE: 1,
     VSCP_TYPE_LOG_START: 2,
     VSCP_TYPE_LOG_STOP: 3,
     VSCP_TYPE_LOG_LEVEL: 4,
  
-//  CLASS1.LABORATORY = 510  -  Laboratory use
+    //  CLASS1.LABORATORY = 510  -  Laboratory use
     VSCP_TYPE_LABORATORY_GENERAL: 0,
  
-//  CLASS1.LOCAL = 511  -  Local use
+    //  CLASS1.LOCAL = 511  -  Local use
     VSCP_TYPE_LOCAL_GENERAL: 0,
  
-//  CLASS2.LEVEL1.PROTOCOL = 512  -  Class2 Level I Protocol
-// Event types is the same as  CLASS1.PROTOCOL = 0  -  VSCP Protocol Functionality
- 
-//  CLASS2.LEVEL1.ALARM = 513  -  Class2 Level I Alarm
-// Event types is the same as  CLASS1.ALARM = 1  -  Alarm functionality
- 
-//  CLASS2.LEVEL1.SECURITY = 514  -  Class2 Level I Security
-// Event types is the same as  CLASS1.SECURITY = 2  -  Security
- 
-//  CLASS2.LEVEL1.MEASUREMENT = 522  -  Class2 Level I Measurements
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS2.LEVEL1.DATA = 527  -  Class2 Level I Data
-// Event types is the same as  CLASS1.DATA = 15  -  Data
- 
-//  CLASS2.LEVEL1.INFORMATION1 = 532  -  Class2 Level I Information
-// Event types is the same as  CLASS1.INFORMATION = 20  -  Information
- 
-//  CLASS2.LEVEL1.CONTROL = 542  -  Class2 Level I Control
-// Event types is the same as  CLASS1.CONTROL = 30  -  Control
- 
-//  CLASS2.LEVEL1.MULTIMEDIA = 552  -  Class2 Level I Multimedia
-// Event types is the same as  CLASS1.MULTIMEDIA = 40  -  Multimedia
- 
-//  CLASS2.LEVEL1.AOL = 562  -  Class2 Level I AOL
-// Event types is the same as  CLASS1.AOL = 50  -  Alert On LAN
- 
-//  CLASS2.LEVEL1.MEASUREMENT64 = 572  -  Class2 Level I Measurement64
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS2.LEVEL1.MEASUREZONE = 577  -  Class2 Level I Measurementzone
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS2.LEVEL1.MEASUREMENT32 = 582  -  Class2 Level I Measuremet32
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS2.LEVEL1.SETVALUEZONE = 597  -  Class2 Level I SetValueZone
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS2.LEVEL1.WEATHER = 602  -  Class2 Level I Weather
-// Event types is the same as  CLASS1.WEATHER = 90  -  Weather
- 
-//  CLASS2.LEVEL1.WEATHERFORECAST = 607  -  Class2 Level I Weather Forecast
-// Event types is the same as  CLASS1.WEATHER = 90  -  Weather
- 
-//  CLASS2.LEVEL1.PHONE = 612  -  Class2 Level I Phone
-// Event types is the same as  CLASS1.PHONE = 100  -  Phone
- 
-//  CLASS2.LEVEL1.DISPLAY = 614  -  Class2 Level I Display
-// Event types is the same as  CLASS1.DISPLAY = 102  -  Display
- 
-//  CLASS2.LEVEL1.IR = 622  -  Class2 Level I IR
-// Event types is the same as  CLASS1.IR = 110  -  IR Remote I/f
- 
-//  CLASS2.LEVEL1.GNSS = 718  -  Class2 Level I GNSS
-// Event types is the same as  CLASS1.GNSS = 206  -  Position (GNSS)
- 
-//  CLASS2.LEVEL1.WIRELESS = 724  -  Class2 Level I Wireless
-// Event types is the same as  CLASS1.WIRELESS = 212  -  Wireless
- 
-//  CLASS2.LEVEL1.DIAGNOSTIC = 1018  -  Class2 Level I Diagnostic
-// Event types is the same as  CLASS1.DIAGNOSTIC = 506  -  Diagnostic
- 
-//  CLASS2.LEVEL1.ERROR = 1020  -  Class2 Level I Error
-// Event types is the same as  CLASS1.ERROR = 508  -  Error
- 
-//  CLASS2.LEVEL1.LOG = 1021  -  Class2 Level I Log
-// Event types is the same as  CLASS1.LOG = 509  -  Logging
- 
-//  CLASS2.LEVEL1.LABORATORY = 1022  -  Class2 Level I Laboratory
-// Event types is the same as  CLASS1.LABORATORY = 510  -  Laboratory use
- 
-//  CLASS2.LEVEL1.LOCAL = 1023  -  Class2 Level I Local
-// Event types is the same as  CLASS1.LOCAL = 511  -  Local use
- 
-//  CLASS2.PROTOCOL = 1024  -  Level II Protocol Functionality
+    //  CLASS2.LEVEL1.PROTOCOL = 512  -  Class2 Level I Protocol
+    // Event types is the same as  CLASS1.PROTOCOL = 0  -  VSCP Protocol Functionality
+    
+    //  CLASS2.LEVEL1.ALARM = 513  -  Class2 Level I Alarm
+    // Event types is the same as  CLASS1.ALARM = 1  -  Alarm functionality
+    
+    //  CLASS2.LEVEL1.SECURITY = 514  -  Class2 Level I Security
+    // Event types is the same as  CLASS1.SECURITY = 2  -  Security
+    
+    //  CLASS2.LEVEL1.MEASUREMENT = 522  -  Class2 Level I Measurements
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS2.LEVEL1.DATA = 527  -  Class2 Level I Data
+    // Event types is the same as  CLASS1.DATA = 15  -  Data
+    
+    //  CLASS2.LEVEL1.INFORMATION1 = 532  -  Class2 Level I Information
+    // Event types is the same as  CLASS1.INFORMATION = 20  -  Information
+    
+    //  CLASS2.LEVEL1.CONTROL = 542  -  Class2 Level I Control
+    // Event types is the same as  CLASS1.CONTROL = 30  -  Control
+    
+    //  CLASS2.LEVEL1.MULTIMEDIA = 552  -  Class2 Level I Multimedia
+    // Event types is the same as  CLASS1.MULTIMEDIA = 40  -  Multimedia
+    
+    //  CLASS2.LEVEL1.AOL = 562  -  Class2 Level I AOL
+    // Event types is the same as  CLASS1.AOL = 50  -  Alert On LAN
+    
+    //  CLASS2.LEVEL1.MEASUREMENT64 = 572  -  Class2 Level I Measurement64
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS2.LEVEL1.MEASUREZONE = 577  -  Class2 Level I Measurementzone
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS2.LEVEL1.MEASUREMENT32 = 582  -  Class2 Level I Measuremet32
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS2.LEVEL1.SETVALUEZONE = 597  -  Class2 Level I SetValueZone
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS2.LEVEL1.WEATHER = 602  -  Class2 Level I Weather
+    // Event types is the same as  CLASS1.WEATHER = 90  -  Weather
+    
+    //  CLASS2.LEVEL1.WEATHERFORECAST = 607  -  Class2 Level I Weather Forecast
+    // Event types is the same as  CLASS1.WEATHER = 90  -  Weather
+    
+    //  CLASS2.LEVEL1.PHONE = 612  -  Class2 Level I Phone
+    // Event types is the same as  CLASS1.PHONE = 100  -  Phone
+    
+    //  CLASS2.LEVEL1.DISPLAY = 614  -  Class2 Level I Display
+    // Event types is the same as  CLASS1.DISPLAY = 102  -  Display
+    
+    //  CLASS2.LEVEL1.IR = 622  -  Class2 Level I IR
+    // Event types is the same as  CLASS1.IR = 110  -  IR Remote I/f
+    
+    //  CLASS2.LEVEL1.GNSS = 718  -  Class2 Level I GNSS
+    // Event types is the same as  CLASS1.GNSS = 206  -  Position (GNSS)
+    
+    //  CLASS2.LEVEL1.WIRELESS = 724  -  Class2 Level I Wireless
+    // Event types is the same as  CLASS1.WIRELESS = 212  -  Wireless
+    
+    //  CLASS2.LEVEL1.DIAGNOSTIC = 1018  -  Class2 Level I Diagnostic
+    // Event types is the same as  CLASS1.DIAGNOSTIC = 506  -  Diagnostic
+    
+    //  CLASS2.LEVEL1.ERROR = 1020  -  Class2 Level I Error
+    // Event types is the same as  CLASS1.ERROR = 508  -  Error
+    
+    //  CLASS2.LEVEL1.LOG = 1021  -  Class2 Level I Log
+    // Event types is the same as  CLASS1.LOG = 509  -  Logging
+    
+    //  CLASS2.LEVEL1.LABORATORY = 1022  -  Class2 Level I Laboratory
+    // Event types is the same as  CLASS1.LABORATORY = 510  -  Laboratory use
+    
+    //  CLASS2.LEVEL1.LOCAL = 1023  -  Class2 Level I Local
+    // Event types is the same as  CLASS1.LOCAL = 511  -  Local use
+    
+    //  CLASS2.PROTOCOL = 1024  -  Level II Protocol Functionality
     VSCP2_TYPE_PROTOCOL_GENERAL: 0,
     VSCP2_TYPE_PROTOCOL_READ_REGISTER: 1,
     VSCP2_TYPE_PROTOCOL_WRITE_REGISTER: 2,
@@ -726,33 +726,33 @@ vscp.constants.types = {
     VSCP2_TYPE_PROTOCOL_HIGH_END_SERVER_CAPS: 20,
     VSCP2_TYPE_PROTOCOL_WHO_IS_THERE_RESPONSE: 32,
  
-//  CLASS2.CONTROL = 1025  -  Level II Control
+    //  CLASS2.CONTROL = 1025  -  Level II Control
     VSCP2_TYPE_CONTROL_GENERAL: 0,
  
-//  CLASS2.INFORMATION = 1026  -  Level II Information
+    //  CLASS2.INFORMATION = 1026  -  Level II Information
     VSCP2_TYPE_INFORMATION_GENERAL: 0,
     VSCP2_TYPE_INFORMATION_TOKEN_ACTIVITY: 1,
     VSCP2_TYPE_INFORMATION_HEART_BEAT: 2,
     VSCP2_TYPE_INFORMATION_PROXY_HEART_BEAT: 3,
     VSCP2_TYPE_INFORMATION_CHANNEL_ANNOUNCE: 4,
  
-//  CLASS2.TEXT2SPEECH = 1027  -  Text to speech
+    //  CLASS2.TEXT2SPEECH = 1027  -  Text to speech
     VSCP2_TYPE_TEXT2SPEECH_GENERAL: 0,
     VSCP2_TYPE_TEXT2SPEECH_TALK: 1,
  
-//  CLASS2.CUSTOM = 1029  -  Level II Custom
+    //  CLASS2.CUSTOM = 1029  -  Level II Custom
     VSCP2_TYPE_CUSTOM_GENERAL: 0,
  
-//  CLASS2.DISPLAY = 1030  -  Level II Display
+    //  CLASS2.DISPLAY = 1030  -  Level II Display
     VSCP2_TYPE_DISPLAY_GENERAL: 0,
  
-//  CLASS2.MEASUREMENT_STR = 1040  -  Measurement string
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS2.MEASUREMENT_FLOAT = 1060  -  Measurement float
-// Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
- 
-//  CLASS2.VSCPD = 65535  -  VSCP Daemon internal events
+    //  CLASS2.MEASUREMENT_STR = 1040  -  Measurement string
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS2.MEASUREMENT_FLOAT = 1060  -  Measurement float
+    // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+    
+    //  CLASS2.VSCPD = 65535  -  VSCP Daemon internal events
     VSCP2_TYPE_VSCPD_GENERAL: 0,
     VSCP2_TYPE_VSCPD_LOOP: 1,
     VSCP2_TYPE_VSCPD_PAUSE: 3,
