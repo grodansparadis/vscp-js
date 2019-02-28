@@ -7,7 +7,8 @@ node_js:
     - "lts/*"
 
 before_script:
-    - npm install eslint
+    - npm install
 
 script:
-    - ./node_modules/.bin/eslint src/*.js
+    - npm run tsc
+    - npm run eslint

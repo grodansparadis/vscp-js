@@ -54,9 +54,9 @@ vscp._createNS("vscp.widget");
  */
 vscp.widget.generateUUID = function() {
 
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
         var r = Math.random() * 16 | 0;
-        var v = (c === 'x') ? r : ((r & 0x03) | 0x08);
+        var v = (c === "x") ? r : ((r & 0x03) | 0x08);
         return v.toString(16);
     });
 
@@ -96,14 +96,13 @@ vscp.widget.Image = function(options) {
     }
 
     $(this.canvasName).drawImage({
-            name: this._id, // Layer name
-            layer: true, // Create layer
-            source: this.url, // Image path
-            x: this.x, // x position in the canvas
-            y: this.y, // y position in the canvas
-            fromCenter: false // Coordinates origin is in the upper left corner
-        })
-        .drawLayers();
+        name: this._id, // Layer name
+        layer: true, // Create layer
+        source: this.url, // Image path
+        x: this.x, // x position in the canvas
+        y: this.y, // y position in the canvas
+        fromCenter: false // Coordinates origin is in the upper left corner
+    }).drawLayers();
 };
 
 /**
@@ -230,42 +229,42 @@ vscp.widget.Button = function(options) {
     // Event listener for VSCP events
     var eventListener = (function(client, evt) {
 
-            if ("undefined" === typeof evt) {
-                return;
-            }
+        if ("undefined" === typeof evt) {
+            return;
+        }
 
-            if (false === (evt instanceof vscp.Event)) {
-                return;
-            }
+        if (false === (evt instanceof vscp.Event)) {
+            return;
+        }
 
-            if (false === this.bindToRemoteState) {
-                return;
-            }
+        if (false === this.bindToRemoteState) {
+            return;
+        }
 
-            if (vscp.constants.classes.VSCP_CLASS1_INFORMATION === evt.vscpClass) {
+        if (vscp.constants.classes.VSCP_CLASS1_INFORMATION === evt.vscpClass) {
 
-                if (vscp.constants.types.VSCP_TYPE_INFORMATION_ON === evt.vscpType) {
+            if (vscp.constants.types.VSCP_TYPE_INFORMATION_ON === evt.vscpType) {
 
-                    // Zone and sub-zone match?
-                    if ((this.receiveZone === evt.vscpData[1]) &&
+                // Zone and sub-zone match?
+                if ((this.receiveZone === evt.vscpData[1]) &&
                         (this.receiveSubZone === evt.vscpData[2])) {
 
-                        this._state = true;
-                        this.draw();
-                    }
-                } else if (vscp.constants.types.VSCP_TYPE_INFORMATION_OFF === evt.vscpType) {
-
-                    // Zone and sub-zone match?
-                    if ((this.receiveZone === evt.vscpData[1]) &&
-                        (this.receiveSubZone === evt.vscpData[2])) {
-
-                        this._state = false;
-                        this.draw();
-                    }
-
+                    this._state = true;
+                    this.draw();
                 }
+            } else if (vscp.constants.types.VSCP_TYPE_INFORMATION_OFF === evt.vscpType) {
+
+                // Zone and sub-zone match?
+                if ((this.receiveZone === evt.vscpData[1]) &&
+                        (this.receiveSubZone === evt.vscpData[2])) {
+
+                    this._state = false;
+                    this.draw();
+                }
+
             }
-        })
+        }
+    })
         .bind(this);
 
     /* eslint-disable no-unused-vars */
@@ -366,7 +365,7 @@ vscp.widget.Button = function(options) {
             visible: false
         })
         .addLayer({
-            type: 'function',
+            type: "function",
             name: this._idDisabled,
             fn: (function() {
 
@@ -375,7 +374,7 @@ vscp.widget.Button = function(options) {
 
                 $(this.canvasName)
                     .drawLine({
-                        strokeStyle: '#f00',
+                        strokeStyle: "#f00",
                         strokeWidth: 2,
                         x1: (this.x - (imageWidth / 2)),
                         y1: (this.y - (imageHeight / 2)),
@@ -383,7 +382,7 @@ vscp.widget.Button = function(options) {
                         y2: (this.y + (imageHeight / 2))
                     })
                     .drawLine({
-                        strokeStyle: '#f00',
+                        strokeStyle: "#f00",
                         strokeWidth: 2,
                         x1: (this.x - (imageWidth / 2)),
                         y1: (this.y + (imageHeight / 2)),
@@ -451,7 +450,7 @@ vscp.widget.Button.prototype.setEnabled = function(value) {
  * @param {number} options.data.height          - Thermometer column height (only between numbers)
  * @param {number} options.data.width           - Thermometer column width
  * @param {number} options.data.yOffset         - Thermometer column height offset from the begin to the first number
- * @param {string} options.data.color           - HTML color, e.g. '#8A0000'
+ * @param {string} options.data.color           - HTML color, e.g. "#8A0000"
  * @param {number} [options.scale]              - Scale factor applied to the thermometer image (default: 1.0)
  * @param {vscp.ws.Client} options.client       - VSCP websocket client, used for event communication
  * @param {number} [options.receiveZone]        - Zone where state events will come from (default: 255)
@@ -688,7 +687,7 @@ vscp.widget.Thermometer = function(options) {
             visible: true
         })
         .addLayer({
-            type: 'function',
+            type: "function",
             name: this._idDisabled,
             fn: (function() {
 
@@ -697,7 +696,7 @@ vscp.widget.Thermometer = function(options) {
 
                 $(this.canvasName)
                     .drawLine({
-                        strokeStyle: '#f00',
+                        strokeStyle: "#f00",
                         strokeWidth: 2,
                         x1: (this.x - (imageWidth / 2)),
                         y1: (this.y - (imageHeight / 2)),
@@ -705,7 +704,7 @@ vscp.widget.Thermometer = function(options) {
                         y2: (this.y + (imageHeight / 2))
                     })
                     .drawLine({
-                        strokeStyle: '#f00',
+                        strokeStyle: "#f00",
                         strokeWidth: 2,
                         x1: (this.x - (imageWidth / 2)),
                         y1: (this.y + (imageHeight / 2)),
@@ -716,7 +715,7 @@ vscp.widget.Thermometer = function(options) {
             visible: true
         })
         .addLayer({
-            type: 'function',
+            type: "function",
             name: this._idData,
             fn: (function() {
 

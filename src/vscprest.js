@@ -52,7 +52,7 @@ vscp._createNS("vscp.rest");
  * @class
  * @param {string}      config                  - Configuration
  * @param {string}      [config.baseUrl]        - VSCP daemon URL (protocol + hostname + port)
- * @param {string}      [options.pathPrefix]    - Path prefix (default: '/vscp'), which comes right after the base url.
+ * @param {string}      [options.pathPrefix]    - Path prefix (default: "/vscp"), which comes right after the base url.
  * @param {string}      [options.apiVersion]    - API version (for future use)
  */
 vscp.rest.Client = function(config) {
@@ -60,22 +60,22 @@ vscp.rest.Client = function(config) {
     /** Base URL
      * @member {string}
      */
-    this.baseUrl = 'http://localhost:8884';
+    this.baseUrl = "http://localhost:8884";
 
     /** Path prefix
      * @member {string}
      */
-    this.pathPrefix = '/vscp';
+    this.pathPrefix = "/vscp";
 
     /** REST API version (future use)
      * @member {string}
      */
-    this.apiVersion = '';
+    this.apiVersion = "";
 
     /** Session key
      * @member {string}
      */
-    this.sessionKey = '';
+    this.sessionKey = "";
 
     if ("undefined" !== typeof config) {
 
@@ -99,8 +99,8 @@ vscp.rest.Client = function(config) {
      * @return URL
      */
     this._buildUrl = function(path) {
-        var apiBasePath = this.pathPrefix + '/rest'; // In the future: '/rest/api';
-        var version = (0 < this.apiVersion) ? ('/' + this.apiVersion) : '';
+        var apiBasePath = this.pathPrefix + "/rest"; // In the future: "/rest/api";
+        var version = (0 < this.apiVersion) ? ("/" + this.apiVersion) : "";
         var requestUrl = this.baseUrl + apiBasePath + version + path;
         return decodeURIComponent(requestUrl);
     };
@@ -113,7 +113,7 @@ vscp.rest.Client = function(config) {
      * @param {object}      options             - Options
      * @param {string}      options.path        - Relative path
      * @param {string[]}    options.parameter   - Array of URL parameter
-     * @param {string}      options.type        - 'GET', 'POST', or etc.
+     * @param {string}      options.type        - "GET", "POST", or etc.
      * @param {function}    [options.onSuccess] - Callback, which is called for successful request.
      * @param {function}    [options.onError]   - Callback, which is called for failed request.
      * 
@@ -152,104 +152,103 @@ vscp.rest.Client = function(config) {
             for (index = 0; index < options.parameter.length; ++index) {
 
                 if (0 == index) {
-                    url += '?';
+                    url += "?";
                 } else {
-                    url += '&';
+                    url += "&";
                 }
 
                 url += options.parameter[index].name;
-                url += '=';
+                url += "=";
                 url += options.parameter[index].value;
             }
 
             console.debug(vscp.utility.getTime() + " Make request: " + url);
 
             return $.ajax({
-                    url: url,
-                    type: options.type,
-                    jsonpCallback: 'handler',
-                    cache: true,
-                    dataType: 'jsonp'
-                })
-                .then(
-                    // On success, manipulate callback and promise data to get harmonized response
-                    function(response) {
-                        var data = null;
+                url: url,
+                type: options.type,
+                jsonpCallback: "handler",
+                cache: true,
+                dataType: "jsonp"
+            }).then(
+                // On success, manipulate callback and promise data to get harmonized response
+                function(response) {
+                    var data = null;
 
-                        // Positive response received from VSCP daemon?
-                        if (true === response.success) {
-                            data = {
-                                success: true,
-                                clientError: null,
-                                serverError: null,
-                                response: response
-                            };
-
-                            if ("function" === typeof options.onSuccess) {
-                                options.onSuccess(data);
-                            }
-
-                            resolve(data);
-                            return;
-                        }
-
-                        // Negative response received from VSCP daemon
+                    // Positive response received from VSCP daemon?
+                    if (true === response.success) {
                         data = {
-                            success: false,
+                            success: true,
                             clientError: null,
                             serverError: null,
                             response: response
-                        }
-
-                        if ("function" === typeof options.onError) {
-                            options.onError(data);
-                        }
-
-                        reject(data);
-                        return;
-                    }.bind(this),
-                    // On error, manipulate callback and promise data to get harmonized response
-                    function(xhr, status, error) {
-                        var data = {
-                            success: false,
-                            clientError: null,
-                            serverError: {
-                                xhr: xhr,
-                                status: status,
-                                error: error
-                            },
-                            response: null
                         };
 
-                        switch (xhr.readyState) {
-                            case 0:
-                                console.error(vscp.utility.getTime() + " Ready state = UNSENT");
-                                break;
-                            case 1:
-                                console.error(vscp.utility.getTime() + " Ready state = OPENED");
-                                break;
-                            case 2:
-                                console.error(vscp.utility.getTime() + " Ready state = HEADERS_RECEIVED");
-                                break;
-                            case 3:
-                                console.error(vscp.utility.getTime() + " Ready state = LOADING");
-                                break;
-                            case 4:
-                                console.error(vscp.utility.getTime() + " Ready state = DONE");
-                                break;
-                            default:
-                                console.error(vscp.utility.getTime() + " Ready state = " + xhr.readyState);
-                                break;
+                        if ("function" === typeof options.onSuccess) {
+                            options.onSuccess(data);
                         }
 
-                        if ("function" === typeof options.onError) {
-                            options.onError(data);
-                        }
-
-                        reject(data);
+                        resolve(data);
                         return;
-                    }.bind(this)
-                );
+                    }
+
+                    // Negative response received from VSCP daemon
+                    data = {
+                        success: false,
+                        clientError: null,
+                        serverError: null,
+                        response: response
+                    };
+
+                    if ("function" === typeof options.onError) {
+                        options.onError(data);
+                    }
+
+                    reject(data);
+                    return;
+                }.bind(this),
+                // On error, manipulate callback and promise data to get harmonized response
+                function(xhr, status, error) {
+                    var data = {
+                        success: false,
+                        clientError: null,
+                        serverError: {
+                            xhr: xhr,
+                            status: status,
+                            error: error
+                        },
+                        response: null
+                    };
+
+                    switch (xhr.readyState) {
+                        case 0:
+                            console.error(vscp.utility.getTime() + " Ready state = UNSENT");
+                            break;
+                        case 1:
+                            console.error(vscp.utility.getTime() + " Ready state = OPENED");
+                            break;
+                        case 2:
+                            console.error(vscp.utility.getTime() + " Ready state = HEADERS_RECEIVED");
+                            break;
+                        case 3:
+                            console.error(vscp.utility.getTime() + " Ready state = LOADING");
+                            break;
+                        case 4:
+                            console.error(vscp.utility.getTime() + " Ready state = DONE");
+                            break;
+                        default:
+                            console.error(vscp.utility.getTime() + " Ready state = " + xhr.readyState);
+                            break;
+                    }
+
+                    if ("function" === typeof options.onError) {
+                        options.onError(data);
+                    }
+
+                    reject(data);
+                    return;
+                }.bind(this)
+            );
         }.bind(this));
     };
 
@@ -309,21 +308,21 @@ vscp.rest.Client = function(config) {
         console.info(vscp.utility.getTime() + " Open session to " + this.baseUrl + " with " + options.user + ":" + options.password);
 
         return this._makeRequest({
-            path: '',
+            path: "",
             parameter: [{
-                name: 'vscpuser',
+                name: "vscpuser",
                 value: options.user
             }, {
-                name: 'vscpsecret',
+                name: "vscpsecret",
                 value: options.password
             }, {
-                name: 'format',
-                value: 'jsonp'
+                name: "format",
+                value: "jsonp"
             }, {
-                name: 'op',
-                value: 'open'
+                name: "op",
+                value: "open"
             }],
-            type: 'GET',
+            type: "GET",
             onSuccess: function(data) {
                 console.info(vscp.utility.getTime() + " Session opened: " + data.response.vscpsession);
 
@@ -370,23 +369,23 @@ vscp.rest.Client = function(config) {
         console.info(vscp.utility.getTime() + " Close session '" + this.sessionKey + "' to " + this.baseUrl);
 
         return this._makeRequest({
-            path: '',
+            path: "",
             parameter: [{
-                name: 'vscpsession',
+                name: "vscpsession",
                 value: this.sessionKey
             }, {
-                name: 'format',
-                value: 'jsonp'
+                name: "format",
+                value: "jsonp"
             }, {
-                name: 'op',
-                value: 'close'
+                name: "op",
+                value: "close"
             }],
-            type: 'GET',
+            type: "GET",
             onSuccess: function(data) {
                 console.info(vscp.utility.getTime() + " Session closed: " + data.response.vscpsession);
 
                 // Clear session key
-                this.sessionKey = '';
+                this.sessionKey = "";
 
                 if ("undefined" !== typeof options) {
                     if ("function" === typeof options.onSuccess) {
@@ -432,18 +431,18 @@ vscp.rest.Client = function(config) {
         console.info(vscp.utility.getTime() + " Get status (" + this.sessionKey + ")");
 
         return this._makeRequest({
-            path: '',
+            path: "",
             parameter: [{
-                name: 'vscpsession',
+                name: "vscpsession",
                 value: this.sessionKey
             }, {
-                name: 'format',
-                value: 'jsonp'
+                name: "format",
+                value: "jsonp"
             }, {
-                name: 'op',
-                value: 'status'
+                name: "op",
+                value: "status"
             }],
-            type: 'GET',
+            type: "GET",
             onSuccess: function(data) {
                 console.info(vscp.utility.getTime() + " Get status successful: " + JSON.stringify(data.response));
 
@@ -498,21 +497,21 @@ vscp.rest.Client = function(config) {
         console.info(vscp.utility.getTime() + " Send event (" + this.sessionKey + "): " + options.event.getText());
 
         return this._makeRequest({
-            path: '',
+            path: "",
             parameter: [{
-                name: 'vscpsession',
+                name: "vscpsession",
                 value: this.sessionKey
             }, {
-                name: 'format',
-                value: 'jsonp'
+                name: "format",
+                value: "jsonp"
             }, {
-                name: 'op',
-                value: 'sendevent'
+                name: "op",
+                value: "sendevent"
             }, {
-                name: 'vscpevent',
+                name: "vscpevent",
                 value: options.event.getText()
             }],
-            type: 'GET',
+            type: "GET",
             onSuccess: function(data) {
                 console.info(vscp.utility.getTime() + " Event sent.");
 
@@ -565,111 +564,110 @@ vscp.rest.Client = function(config) {
         console.info(vscp.utility.getTime() + " Read event (" + this.sessionKey + ")");
 
         return this._makeRequest({
-                path: '',
-                parameter: [{
-                    name: 'vscpsession',
-                    value: this.sessionKey
-                }, {
-                    name: 'format',
-                    value: 'jsonp'
-                }, {
-                    name: 'op',
-                    value: 'readevent'
-                }, {
-                    name: 'count',
-                    value: count
-                }],
-                type: 'GET',
-                onSuccess: function(data) {
-                    console.info(vscp.utility.getTime() + " Read event successful: " + JSON.stringify(data.response));
-                },
-                onError: function(data) {
-                    if (null !== data.clientError) {
-                        console.error(vscp.utility.getTime() + " Failed to read event: " + data.clientError);
-                    } else if (null !== data.serverError) {
-                        console.error(vscp.utility.getTime() + " Failed to read event: " + JSON.stringify(data.serverError));
-                    }
+            path: "",
+            parameter: [{
+                name: "vscpsession",
+                value: this.sessionKey
+            }, {
+                name: "format",
+                value: "jsonp"
+            }, {
+                name: "op",
+                value: "readevent"
+            }, {
+                name: "count",
+                value: count
+            }],
+            type: "GET",
+            onSuccess: function(data) {
+                console.info(vscp.utility.getTime() + " Read event successful: " + JSON.stringify(data.response));
+            },
+            onError: function(data) {
+                if (null !== data.clientError) {
+                    console.error(vscp.utility.getTime() + " Failed to read event: " + data.clientError);
+                } else if (null !== data.serverError) {
+                    console.error(vscp.utility.getTime() + " Failed to read event: " + JSON.stringify(data.serverError));
                 }
-            })
+            }
+        }).then(
             // Catch VSCP daemon response with event and convert it to vscp.Event objects
-            .then(
-                // Success
-                function(data) {
-                    /* eslint-disable no-unused-vars */
-                    return new Promise(function(resolve, reject) {
-                    /* eslint-enable no-unused-vars */
-                        var index = 0;
-                        var eventList = [];
-                        var event = null;
+            // Success
+            function(data) {
+                /* eslint-disable no-unused-vars */
+                return new Promise(function(resolve, reject) {
+                /* eslint-enable no-unused-vars */
+                    var index = 0;
+                    var eventList = [];
+                    var event = null;
 
-                        if (null !== data.response) {
+                    if (null !== data.response) {
 
-                            // Convert REST jsonp event format to vscp.Event format
-                            for (index = 0; index < data.response.count; ++index) {
-                                event = new vscp.Event({
-                                    vscpHead: data.response.event[index].head,
-                                    vscpClass: data.response.event[index].vscpClass,
-                                    vscpType: data.response.event[index].vscpType,
-                                    vscpObId: data.response.event[index].obid,
-                                    vscpTimeStamp: data.response.event[index].timestamp,
-                                    vscpDateTime: new Date(data.response.event[index].datetime),
-                                    vscpGuid: data.response.event[index].guid,
-                                    vscpData: data.response.event[index].data
-                                });
-                                eventList.push(event);
-                            }
-
-                            data.response.event = eventList;
+                        // Convert REST jsonp event format to vscp.Event format
+                        for (index = 0; index < data.response.count; ++index) {
+                            event = new vscp.Event({
+                                vscpHead: data.response.event[index].head,
+                                vscpClass: data.response.event[index].vscpClass,
+                                vscpType: data.response.event[index].vscpType,
+                                vscpObId: data.response.event[index].obid,
+                                vscpTimeStamp: data.response.event[index].timestamp,
+                                vscpDateTime: new Date(data.response.event[index].datetime),
+                                vscpGuid: data.response.event[index].guid,
+                                vscpData: data.response.event[index].data
+                            });
+                            eventList.push(event);
                         }
 
-                        if ("undefined" !== typeof options) {
-                            if ("function" === typeof options.onSuccess) {
-                                options.onSuccess(data);
-                            }
+                        data.response.event = eventList;
+                    }
+
+                    if ("undefined" !== typeof options) {
+                        if ("function" === typeof options.onSuccess) {
+                            options.onSuccess(data);
+                        }
+                    }
+
+                    resolve(data);
+                    return;
+                });
+            }.bind(this),
+            // Error
+            function(data) {
+                return new Promise(function(resolve, reject) {
+                    var index = 0;
+                    var eventList = [];
+                    var event = null;
+
+                    if (null !== data.response) {
+
+                        // Convert REST jsonp event format to vscp.Event format
+                        for (index = 0; index < data.response.count; ++index) {
+                            event = new vscp.Event({
+                                vscpHead: data.response.event[index].head,
+                                vscpClass: data.response.event[index].vscpClass,
+                                vscpType: data.response.event[index].vscpType,
+                                vscpObId: data.response.event[index].obid,
+                                vscpTimeStamp: data.response.event[index].timestamp,
+                                vscpDateTime: new Date(data.response.event[index].datetime),
+                                vscpGuid: data.response.event[index].guid,
+                                vscpData: data.response.event[index].data
+                            });
+                            eventList.push(event);
                         }
 
-                        resolve(data);
-                        return;
-                    });
-                }.bind(this),
-                // Error
-                function(data) {
-                    return new Promise(function(resolve, reject) {
-                        var index = 0;
-                        var eventList = [];
-                        var event = null;
+                        data.response.event = eventList;
+                    }
 
-                        if (null !== data.response) {
-
-                            // Convert REST jsonp event format to vscp.Event format
-                            for (index = 0; index < data.response.count; ++index) {
-                                event = new vscp.Event({
-                                    vscpHead: data.response.event[index].head,
-                                    vscpClass: data.response.event[index].vscpClass,
-                                    vscpType: data.response.event[index].vscpType,
-                                    vscpObId: data.response.event[index].obid,
-                                    vscpTimeStamp: data.response.event[index].timestamp,
-                                    vscpDateTime: new Date(data.response.event[index].datetime),
-                                    vscpGuid: data.response.event[index].guid,
-                                    vscpData: data.response.event[index].data
-                                });
-                                eventList.push(event);
-                            }
-
-                            data.response.event = eventList;
+                    if ("undefined" !== typeof options) {
+                        if ("function" === typeof options.onError) {
+                            options.onError(data);
                         }
+                    }
 
-                        if ("undefined" !== typeof options) {
-                            if ("function" === typeof options.onError) {
-                                options.onError(data);
-                            }
-                        }
-
-                        reject(data);
-                        return;
-                    });
-                }.bind(this)
-            );
+                    reject(data);
+                    return;
+                });
+            }.bind(this)
+        );
     };
 
     /** Set filter.
@@ -784,24 +782,24 @@ vscp.rest.Client = function(config) {
         console.info(vscp.utility.getTime() + " Set filter (" + this.sessionKey + "): filter = " + filter + ", mask = " + mask);
 
         return this._makeRequest({
-            path: '',
+            path: "",
             parameter: [{
-                name: 'vscpsession',
+                name: "vscpsession",
                 value: this.sessionKey
             }, {
-                name: 'format',
-                value: 'jsonp'
+                name: "format",
+                value: "jsonp"
             }, {
-                name: 'op',
-                value: 'setfilter'
+                name: "op",
+                value: "setfilter"
             }, {
-                name: 'vscpfilter',
+                name: "vscpfilter",
                 value: filter
             }, {
-                name: 'vscpmask',
+                name: "vscpmask",
                 value: mask
             }],
-            type: 'GET',
+            type: "GET",
             onSuccess: function(data) {
                 console.info(vscp.utility.getTime() + " Filter set.");
 
@@ -845,18 +843,18 @@ vscp.rest.Client = function(config) {
         console.info(vscp.utility.getTime() + " Clear queue (" + this.sessionKey + ")");
 
         return this._makeRequest({
-            path: '',
+            path: "",
             parameter: [{
-                name: 'vscpsession',
+                name: "vscpsession",
                 value: this.sessionKey
             }, {
-                name: 'format',
-                value: 'jsonp'
+                name: "format",
+                value: "jsonp"
             }, {
-                name: 'op',
-                value: 'clearqueue'
+                name: "op",
+                value: "clearqueue"
             }],
-            type: 'GET',
+            type: "GET",
             onSuccess: function(data) {
                 console.info(vscp.utility.getTime() + " Clear queue successful: " + JSON.stringify(data.response));
 
@@ -916,8 +914,8 @@ vscp.rest.Client = function(config) {
         }
 
         if ("string" !== typeof options.name) {
-            console.error(vscp.utility.getTime() + " Option 'name' is missing.");
-            return this._abort("Option 'name' is missing.", options.onError);
+            console.error(vscp.utility.getTime() + " Option \"name\" is missing.");
+            return this._abort("Option \"name\" is missing.", options.onError);
         }
 
         if ("number" === typeof options.type) {
@@ -930,7 +928,7 @@ vscp.rest.Client = function(config) {
 
         if ("string" === typeof options.persistency) {
 
-            if ('false' === options.persistency.toLowerCase()) {
+            if ("false" === options.persistency.toLowerCase()) {
                 persistency = false;
             } else {
                 persistency = true;
@@ -938,8 +936,8 @@ vscp.rest.Client = function(config) {
         } else if ("boolean" === typeof options.persistency) {
             persistency = options.persistency;
         } else {
-            console.error(vscp.utility.getTime() + " Option 'persistency' is missing.");
-            return this._abort("Option 'persistency' is missing.", options.onError);
+            console.error(vscp.utility.getTime() + " Option \"persistency\" is missing.");
+            return this._abort("Option \"persistency\" is missing.", options.onError);
         }
 
         if ("string" !== typeof options.value) {
@@ -949,8 +947,8 @@ vscp.rest.Client = function(config) {
         } else if ("boolean" !== typeof options.value) {
             value = (options.value ? "true" : "false");
         } else {
-            console.error(vscp.utility.getTime() + " Option 'value' is missing.");
-            return this._abort("Option 'value' is missing.", options.onError);
+            console.error(vscp.utility.getTime() + " Option \"value\" is missing.");
+            return this._abort("Option \"value\" is missing.", options.onError);
         }
 
         if ("string" === typeof options.note) {
@@ -960,36 +958,36 @@ vscp.rest.Client = function(config) {
         console.info(vscp.utility.getTime() + " Create variable (" + this.sessionKey + ")");
 
         return this._makeRequest({
-            path: '',
+            path: "",
             parameter: [{
-                name: 'vscpsession',
+                name: "vscpsession",
                 value: this.sessionKey
             }, {
-                name: 'format',
-                value: 'jsonp'
+                name: "format",
+                value: "jsonp"
             }, {
-                name: 'op',
-                value: 'createvar'
+                name: "op",
+                value: "createvar"
             }, {
-                name: 'variable',
+                name: "variable",
                 value: options.name
             }, {
-                name: 'type',
+                name: "type",
                 value: type
             }, {
-                name: 'accessright',
+                name: "accessright",
                 value: accessrights
             }, {
-                name: 'persistent',
+                name: "persistent",
                 value: persistency
             }, {
-                name: 'value',
+                name: "value",
                 value: vscp.encodeValueIfBase64(type, value)
             }, {
-                name: 'note',
+                name: "note",
                 value: vscp.b64EncodeUnicode(note)
             }],
-            type: 'GET',
+            type: "GET",
             onSuccess: function(data) {
                 console.info(vscp.utility.getTime() + " Variable created: " + JSON.stringify(data.response));
 
@@ -1034,39 +1032,39 @@ vscp.rest.Client = function(config) {
         }
 
         if ("string" !== typeof options.name) {
-            console.error(vscp.utility.getTime() + " Option 'name' is missing.");
-            return this._abort("Option 'name' is missing.", options.onError);
+            console.error(vscp.utility.getTime() + " Option \"name\" is missing.");
+            return this._abort("Option \"name\" is missing.", options.onError);
         }
 
         console.info(vscp.utility.getTime() + " Read variable (" + this.sessionKey + ")");
 
         return this._makeRequest({
-                path: '',
-                parameter: [{
-                    name: 'vscpsession',
-                    value: this.sessionKey
-                }, {
-                    name: 'format',
-                    value: 'jsonp'
-                }, {
-                    name: 'op',
-                    value: 'readvar'
-                }, {
-                    name: 'variable',
-                    value: options.name
-                }],
-                type: 'GET',
-                onSuccess: function(data) {
-                    console.info(vscp.utility.getTime() + " Variable read: " + JSON.stringify(data.response));
-                },
-                onError: function(data) {
-                    if (null !== data.clientError) {
-                        console.error(vscp.utility.getTime() + " Failed to read variable: " + data.clientError);
-                    } else if (null !== data.serverError) {
-                        console.error(vscp.utility.getTime() + " Failed to read variable: " + JSON.stringify(data.serverError));
-                    }
+            path: "",
+            parameter: [{
+                name: "vscpsession",
+                value: this.sessionKey
+            }, {
+                name: "format",
+                value: "jsonp"
+            }, {
+                name: "op",
+                value: "readvar"
+            }, {
+                name: "variable",
+                value: options.name
+            }],
+            type: "GET",
+            onSuccess: function(data) {
+                console.info(vscp.utility.getTime() + " Variable read: " + JSON.stringify(data.response));
+            },
+            onError: function(data) {
+                if (null !== data.clientError) {
+                    console.error(vscp.utility.getTime() + " Failed to read variable: " + data.clientError);
+                } else if (null !== data.serverError) {
+                    console.error(vscp.utility.getTime() + " Failed to read variable: " + JSON.stringify(data.serverError));
                 }
-            })
+            }
+        })
             // Catch VSCP daemon response and convert base64 encoded stuff back to string and other things
             .then(
                 // Success
@@ -1135,8 +1133,8 @@ vscp.rest.Client = function(config) {
         }
 
         if ("string" !== typeof options.name) {
-            console.error(vscp.utility.getTime() + " Option 'name' is missing.");
-            return this._abort("Option 'name' is missing.", options.onError);
+            console.error(vscp.utility.getTime() + " Option \"name\" is missing.");
+            return this._abort("Option \"name\" is missing.", options.onError);
         }
 
         if ("string" !== typeof options.value) {
@@ -1146,8 +1144,8 @@ vscp.rest.Client = function(config) {
         } else if ("boolean" !== typeof options.value) {
             value = (options.value ? "true" : "false");
         } else {
-            console.error(vscp.utility.getTime() + " Option 'value' is missing.");
-            return this._abort("Option 'value' is missing.", options.onError);
+            console.error(vscp.utility.getTime() + " Option \"value\" is missing.");
+            return this._abort("Option \"value\" is missing.", options.onError);
         }
 
         if ("number" !== typeof options.type) {
@@ -1158,24 +1156,24 @@ vscp.rest.Client = function(config) {
         console.info(vscp.utility.getTime() + " Write variable (" + this.sessionKey + ")");
 
         return this._makeRequest({
-            path: '',
+            path: "",
             parameter: [{
-                name: 'vscpsession',
+                name: "vscpsession",
                 value: this.sessionKey
             }, {
-                name: 'format',
-                value: 'jsonp'
+                name: "format",
+                value: "jsonp"
             }, {
-                name: 'op',
-                value: 'writevar'
+                name: "op",
+                value: "writevar"
             }, {
-                name: 'variable',
+                name: "variable",
                 value: options.name
             }, {
-                name: 'value',
+                name: "value",
                 value: vscp.encodeValueIfBase64(options.type, value)
             }],
-            type: 'GET',
+            type: "GET",
             onSuccess: function(data) {
                 console.info(vscp.utility.getTime() + " Variable written: " + JSON.stringify(data.response));
 
@@ -1220,28 +1218,28 @@ vscp.rest.Client = function(config) {
         }
 
         if ("string" !== typeof options.name) {
-            console.error(vscp.utility.getTime() + " Option 'name' is missing.");
-            return this._abort("Option 'name' is missing.", options.onError);
+            console.error(vscp.utility.getTime() + " Option \"name\" is missing.");
+            return this._abort("Option \"name\" is missing.", options.onError);
         }
 
         console.info(vscp.utility.getTime() + " Remove variable (" + this.sessionKey + ")");
 
         return this._makeRequest({
-            path: '',
+            path: "",
             parameter: [{
-                name: 'vscpsession',
+                name: "vscpsession",
                 value: this.sessionKey
             }, {
-                name: 'format',
-                value: 'jsonp'
+                name: "format",
+                value: "jsonp"
             }, {
-                name: 'op',
-                value: 'deletevar'
+                name: "op",
+                value: "deletevar"
             }, {
-                name: 'variable',
+                name: "variable",
                 value: options.name
             }],
-            type: 'GET',
+            type: "GET",
             onSuccess: function(data) {
                 console.info(vscp.utility.getTime() + " Variable removed: " + JSON.stringify(data.response));
 
@@ -1300,35 +1298,35 @@ vscp.rest.Client = function(config) {
         console.info(vscp.utility.getTime() + " List variables (" + this.sessionKey + ")");
 
         return this._makeRequest({
-                path: '',
-                parameter: [{
-                    name: 'vscpsession',
-                    value: this.sessionKey
-                }, {
-                    name: 'format',
-                    value: 'jsonp'
-                }, {
-                    name: 'op',
-                    value: 'listvar'
-                }, {
-                    name: 'listlong',
-                    value: options.listLong
-                }, {
-                    name: 'regex',
-                    value: encodeURIComponent(regex)
-                }],
-                type: 'GET',
-                onSuccess: function(data) {
-                    console.info(vscp.utility.getTime() + " Variables listed: " + JSON.stringify(data.response));
-                },
-                onError: function(data) {
-                    if (null !== data.clientError) {
-                        console.error(vscp.utility.getTime() + " Failed to list variables: " + data.clientError);
-                    } else if (null !== data.serverError) {
-                        console.error(vscp.utility.getTime() + " Failed to list variables: " + JSON.stringify(data.serverError));
-                    }
+            path: "",
+            parameter: [{
+                name: "vscpsession",
+                value: this.sessionKey
+            }, {
+                name: "format",
+                value: "jsonp"
+            }, {
+                name: "op",
+                value: "listvar"
+            }, {
+                name: "listlong",
+                value: options.listLong
+            }, {
+                name: "regex",
+                value: encodeURIComponent(regex)
+            }],
+            type: "GET",
+            onSuccess: function(data) {
+                console.info(vscp.utility.getTime() + " Variables listed: " + JSON.stringify(data.response));
+            },
+            onError: function(data) {
+                if (null !== data.clientError) {
+                    console.error(vscp.utility.getTime() + " Failed to list variables: " + data.clientError);
+                } else if (null !== data.serverError) {
+                    console.error(vscp.utility.getTime() + " Failed to list variables: " + JSON.stringify(data.serverError));
                 }
-            })
+            }
+        })
             // Catch VSCP daemon response and convert base64 encoded stuff back to string and other things
             .then(
                 // Successful
@@ -1385,4 +1383,4 @@ vscp.rest.Client = function(config) {
                 }.bind(this)
             );
     };
-}
+};

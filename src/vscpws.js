@@ -636,11 +636,12 @@ vscp.ws.Client = function() {
     
                 client._sendCommand({
                     command: "AUTH",
-                    data: client.getAuthHash(   client.userName,
-                                                client.password,
-                                                client.vscpkey,
-                                                parameter[2] // iv
-                        ),
+                    data: client.getAuthHash(
+                        client.userName,
+                        client.password,
+                        client.vscpkey,
+                        parameter[2] // iv
+                    ),
                     onSuccess: null,
                     onError: null,
                     resolve: null,
@@ -650,7 +651,7 @@ vscp.ws.Client = function() {
     
             return;
         },
-            /* eslint-disable no-unused-vars */
+        /* eslint-disable no-unused-vars */
         onError: function(client, parameter) {
             /* eslint-enable no-unused-vars */
             var cmd = client._getPendingCommand("FUNCTION_CONNECT");
@@ -684,10 +685,10 @@ vscp.ws.Client = function() {
                 client._sendCommand({
                     command: "AUTH",
                     data: this.getAuthHash( client.userName,
-                                            client.password,
-                                            client.vscpkey,
-                                            parameter[2] // iv
-                        ),
+                        client.password,
+                        client.vscpkey,
+                        parameter[2] // iv
+                    ),
                     onSuccess: null,
                     onError: null,
                     resolve: null,
@@ -722,7 +723,7 @@ vscp.ws.Client = function() {
 
             return;
         },
-            /* eslint-disable no-unused-vars */
+        /* eslint-disable no-unused-vars */
         onError: function(client, parameter) {
             /* eslint-enable no-unused-vars */
             var cmd = client._getPendingCommand("FUNCTION_CONNECT");
@@ -1268,7 +1269,7 @@ vscp.ws.Client.prototype.connect = function(options) {
                 onError: null,
                 resolve: resolve,
                 reject: reject
-            })
+            });
 
             this.socket.onopen = this.onWebSocketOpen.bind(this);
             this.socket.onclose = this.onWebSocketClose.bind(this);
@@ -1707,7 +1708,7 @@ vscp.ws.Client.prototype.createVar = function(options) {
 
         if ("string" === typeof options.persistency) {
 
-            if ('false' === options.persistency.toLowerCase()) {
+            if ("false" === options.persistency.toLowerCase()) {
                 persistency = false;
             }
             else {
@@ -2177,14 +2178,14 @@ vscp.ws.Client.prototype.readTable = function(options) {
             rowBegin = options.begin;
         }
         else if (true === (options.begin instanceof Date)) {
-            rowBegin = options.begin.toISOString()
+            rowBegin = options.begin.toISOString();
         }
 
         if ("string" === typeof options.end) {
             rowEnd = options.end;
         }
         else if (true === (options.end instanceof Date)) {
-            rowEnd = options.begin.toISOString()
+            rowEnd = options.begin.toISOString();
         }
 
         if ("function" === typeof options.onSuccess) {

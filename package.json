@@ -1,0 +1,25 @@
+{
+  "name": "vscp-js",
+  "version": "2.0.0",
+  "description": "VSCP javascript library",
+  "main": ".",
+  "scripts": {
+    "eslint": "eslint src/*.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grodansparadis/vscp-js.git"
+  },
+  "author": "BlueAndi <vscp@blue-andi.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/grodansparadis/vscp-js/issues"
+  },
+  "homepage": "https://github.com/grodansparadis/vscp-js#readme",
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "typescript": "^3.3.3333"
+  }
+}
