@@ -664,8 +664,10 @@ vscp.ws.Client = function() {
                 console.error(vscp.utility.getTime() + " AUTH0 negative reply received, but no challenge is pending!?");
             }
 
-            if (null !== cmd.reject) {
-                cmd.reject(Error("Authentication failed."));
+            if (null !== cmd) {
+                if (null !== cmd.reject) {
+                    cmd.reject(Error("Authentication failed."));
+                }
             }
     
             return;
@@ -734,8 +736,10 @@ vscp.ws.Client = function() {
                 console.error(vscp.utility.getTime() + " AUTH1 negative reply received, but no challenge is pending!?");
             }
 
-            if (null !== cmd.reject) {
-                cmd.reject(Error("Authentication failed."));
+            if (null !== cmd) {
+                if (null !== cmd.reject) {
+                    cmd.reject(Error("Authentication failed."));
+                }
             }
 
             return;
@@ -1081,7 +1085,8 @@ vscp.ws.Client.prototype.onWebSocketMessage = function(msg) {
 
             // Find response parser
             index = 0;
-            while(this._webSocketMessages[index].event !== msgItems[1]) {
+            while((this._webSocketMessages.length > index) &&
+                  (this._webSocketMessages[index].event !== msgItems[1])) {
                 ++index;
             }
         
