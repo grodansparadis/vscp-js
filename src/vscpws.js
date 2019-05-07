@@ -1665,7 +1665,7 @@ vscp.ws.Client.prototype.setFilter = function(options) {
  * @param {object} options                      - Options
  * @param {string} options.name                 - Variable name
  * @param {number} [options.type]               - Variable type (default: string)
- * @param {number} [options.accessrights]       - Variable value (default: 744)
+ * @param {number} [options.accessrights]       - Variable value (default: 0x744)
  * @param {boolean} options.persistency         - Variable is persistent (true) or not (false)
  * @param {string} options.value                - Variable Value
  * @param {string} [options.note]               - Variable note (optional)
@@ -1680,7 +1680,7 @@ vscp.ws.Client.prototype.createVar = function(options) {
         var onSuccess = null;
         var onError = null;
         var type = vscp.constants.varTypes.STRING;  // Default type is string
-        var accessrights = 744;                     // Default access rights
+        var accessrights = 0x744;                     // Default access rights
         var persistency = false;                    // Not persistent
         var note = "";                              // No note
         var value = "";
