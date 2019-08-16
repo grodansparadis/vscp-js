@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2018-10-03 20:15:19.693300
+                        Generated: 2019-08-16 15:27:45.527808
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -116,6 +116,7 @@ vscp.constants.types = {
     VSCP_TYPE_ALARM_EMERGENCY_RESUME: 9,
     VSCP_TYPE_ALARM_ARM: 10,
     VSCP_TYPE_ALARM_DISARM: 11,
+    VSCP_TYPE_ALARM_WATCHDOG: 12,
  
 //  CLASS1.SECURITY = 2  -  Security
     VSCP_TYPE_SECURITY_GENERAL: 0,
@@ -294,6 +295,7 @@ vscp.constants.types = {
     VSCP_TYPE_INFORMATION_DATETIME: 77,
     VSCP_TYPE_INFORMATION_RISING: 78,
     VSCP_TYPE_INFORMATION_FALLING: 79,
+    VSCP_TYPE_INFORMATION_UPDATED: 80,
  
 //  CLASS1.CONTROL = 30  -  Control
     VSCP_TYPE_CONTROL_GENERAL: 0,
@@ -467,6 +469,7 @@ vscp.constants.types = {
     VSCP_TYPE_WEATHER_WARNING_LEVEL4: 49,
     VSCP_TYPE_WEATHER_WARNING_LEVEL5: 50,
     VSCP_TYPE_WEATHER_ARMAGEDON: 51,
+    VSCP_TYPE_WEATHER_UV_INDEX: 52,
  
 //  CLASS1.WEATHER_FORECAST = 95  -  Weather forecast
 // Event types is the same as  CLASS1.WEATHER = 90  -  Weather
@@ -629,6 +632,9 @@ vscp.constants.types = {
     VSCP_TYPE_ERROR_BUFFER_SMALL: 43,
     VSCP_TYPE_ERROR_ITEM_UNKNOWN: 44,
     VSCP_TYPE_ERROR_NAME_USED: 45,
+    VSCP_TYPE_ERROR_DATA_WRITE: 46,
+    VSCP_TYPE_ERROR_ABORTED: 47,
+    VSCP_TYPE_ERROR_INVALID_POINTER: 48,
  
 //  CLASS1.LOG = 509  -  Logging
     VSCP_TYPE_LOG_GENERAL: 0,
