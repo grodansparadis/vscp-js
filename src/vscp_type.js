@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2019-11-01 13:36:23.990546
+                        Generated: 2019-11-01 15:10:33.602318
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -868,11 +868,11 @@ vscp.constants.types = {
     VSCP2_TYPE_VSCPD_TIMER_STOPPED: 28,
     VSCP2_TYPE_VSCPD_TIMER_ELLAPSED: 29,
     VSCP2_TYPE_VSCPD_NEW_CALCULATION: 30,
-    VSCP2_TYPE_VSCPD_START: 31,
-    VSCP2_TYPE_VSCPD_STOP: 32,
-    VSCP2_TYPE_VSCPD_PAUSE: 33,
-    VSCP2_TYPE_VSCPD_RESUME: 34,
-    VSCP2_TYPE_VSCPD_RESTART: 35,
-    VSCP2_TYPE_VSCPD_CONFIG: 36 
+    VSCP2_TYPE_VSCPD_DRV3_START: 31,
+    VSCP2_TYPE_VSCPD_DRV3_STOP: 32,
+    VSCP2_TYPE_VSCPD_DRV3_PAUSE: 33,
+    VSCP2_TYPE_VSCPD_DRV3_RESUME: 34,
+    VSCP2_TYPE_VSCPD_DRV3_RESTART: 35,
+    VSCP2_TYPE_VSCPD_DRV3_CONFIG: 36 
  
 };
