@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2019-10-18 09:09:29.672233
+                        Generated: 2019-11-01 13:36:23.990546
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -216,6 +216,18 @@ vscp.constants.types = {
     VSCP_TYPE_MEASUREMENT_SOUND_PRESSURE: 58,
     VSCP_TYPE_MEASUREMENT_SOUND_DENSITY: 59,
     VSCP_TYPE_MEASUREMENT_SOUND_LEVEL: 60,
+ 
+//  CLASS1.MEASUREMENTX1 = 11  -  Measurement
+    VSCP_TYPE_MEASUREMENTX1_GENERAL: 0,
+ 
+//  CLASS1.MEASUREMENTX2 = 12  -  Measurement
+    VSCP_TYPE_MEASUREMENTX2_GENERAL: 0,
+ 
+//  CLASS1.MEASUREMENTX3 = 13  -  Measurement
+    VSCP_TYPE_MEASUREMENTX3_GENERAL: 0,
+ 
+//  CLASS1.MEASUREMENTX4 = 14  -  Measurement
+    VSCP_TYPE_MEASUREMENTX4_GENERAL: 0,
  
 //  CLASS1.DATA = 15  -  Data
     VSCP_TYPE_DATA_GENERAL: 0,
@@ -427,14 +439,62 @@ vscp.constants.types = {
 //  CLASS1.MEASUREMENT64 = 60  -  Double precision floating point measurement
 // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
  
+//  CLASS1.MEASUREMENT64X1 = 61  -  Double precision floating point measurement
+// Event types is the same as  CLASS1.MEASUREMENTX1 = 11  -  Measurement
+ 
+//  CLASS1.MEASUREMENT64X2 = 62  -  Double precision floating point measurement
+// Event types is the same as  CLASS1.MEASUREMENTX2 = 12  -  Measurement
+ 
+//  CLASS1.MEASUREMENT64X3 = 63  -  Double precision floating point measurement
+// Event types is the same as  CLASS1.MEASUREMENTX3 = 13  -  Measurement
+ 
+//  CLASS1.MEASUREMENT64X4 = 64  -  Double precision floating point measurement
+// Event types is the same as  CLASS1.MEASUREMENTX4 = 14  -  Measurement
+ 
 //  CLASS1.MEASUREZONE = 65  -  Measurement with zone
 // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+ 
+//  CLASS1.MEASUREZONEX1 = 66  -  Measurement with zone
+// Event types is the same as  CLASS1.MEASUREMENTX1 = 11  -  Measurement
+ 
+//  CLASS1.MEASUREZONEX2 = 67  -  Measurement with zone
+// Event types is the same as  CLASS1.MEASUREMENTX2 = 12  -  Measurement
+ 
+//  CLASS1.MEASUREZONEX3 = 68  -  Measurement with zone
+// Event types is the same as  CLASS1.MEASUREMENTX3 = 13  -  Measurement
+ 
+//  CLASS1.MEASUREZONEX4 = 69  -  Measurement with zone
+// Event types is the same as  CLASS1.MEASUREMENTX4 = 14  -  Measurement
  
 //  CLASS1.MEASUREMENT32 = 70  -  Single precision floating point measurement
 // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
  
+//  CLASS1.MEASUREMENT32X1 = 71  -  Single precision floating point measurement
+// Event types is the same as  CLASS1.MEASUREMENTX1 = 11  -  Measurement
+ 
+//  CLASS1.MEASUREMENT32X2 = 72  -  Single precision floating point measurement
+// Event types is the same as  CLASS1.MEASUREMENTX2 = 12  -  Measurement
+ 
+//  CLASS1.MEASUREMENT32X3 = 73  -  Single precision floating point measurement
+// Event types is the same as  CLASS1.MEASUREMENTX3 = 13  -  Measurement
+ 
+//  CLASS1.MEASUREMENT32X4 = 74  -  Single precision floating point measurement
+// Event types is the same as  CLASS1.MEASUREMENTX4 = 14  -  Measurement
+ 
 //  CLASS1.SETVALUEZONE = 85  -  Set value with zone
 // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+ 
+//  CLASS1.SETVALUEZONEX1 = 86  -  Set value with zone
+// Event types is the same as  CLASS1.MEASUREMENTX1 = 11  -  Measurement
+ 
+//  CLASS1.SETVALUEZONEX2 = 87  -  Set value with zone
+// Event types is the same as  CLASS1.MEASUREMENTX2 = 12  -  Measurement
+ 
+//  CLASS1.SETVALUEZONEX3 = 88  -  Set value with zone
+// Event types is the same as  CLASS1.MEASUREMENTX3 = 13  -  Measurement
+ 
+//  CLASS1.SETVALUEZONEX4 = 89  -  Set value with zone
+// Event types is the same as  CLASS1.MEASUREMENTX4 = 14  -  Measurement
  
 //  CLASS1.WEATHER = 90  -  Weather
     VSCP_TYPE_WEATHER_GENERAL: 0,
@@ -807,6 +867,12 @@ vscp.constants.types = {
     VSCP2_TYPE_VSCPD_TIMER_RESUMED: 27,
     VSCP2_TYPE_VSCPD_TIMER_STOPPED: 28,
     VSCP2_TYPE_VSCPD_TIMER_ELLAPSED: 29,
-    VSCP2_TYPE_VSCPD_NEW_CALCULATION: 30 
+    VSCP2_TYPE_VSCPD_NEW_CALCULATION: 30,
+    VSCP2_TYPE_VSCPD_START: 31,
+    VSCP2_TYPE_VSCPD_STOP: 32,
+    VSCP2_TYPE_VSCPD_PAUSE: 33,
+    VSCP2_TYPE_VSCPD_RESUME: 34,
+    VSCP2_TYPE_VSCPD_RESTART: 35,
+    VSCP2_TYPE_VSCPD_CONFIG: 36 
  
 };
