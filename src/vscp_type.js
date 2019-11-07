@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2019-11-01 15:10:33.602318
+                        Generated: 2019-11-07 22:12:16.845586
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -811,6 +811,7 @@ vscp.constants.types = {
     VSCP2_TYPE_PROTOCOL_READ_WRITE_RESPONSE: 3,
     VSCP2_TYPE_PROTOCOL_HIGH_END_SERVER_CAPS: 20,
     VSCP2_TYPE_PROTOCOL_WHO_IS_THERE_RESPONSE: 32,
+    VSCP2_TYPE_PROTOCOL_HIGH_LEVEL_OBJECT: 42,
  
 //  CLASS2.CONTROL = 1025  -  Level II Control
     VSCP2_TYPE_CONTROL_GENERAL: 0,
