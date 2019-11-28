@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2019-11-27 10:24:50.262598
+                        Generated: 2019-11-28 23:05:27.395188
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -320,6 +320,9 @@ vscp.constants.types = {
     VSCP_TYPE_INFORMATION_RISING: 78,
     VSCP_TYPE_INFORMATION_FALLING: 79,
     VSCP_TYPE_INFORMATION_UPDATED: 80,
+    VSCP_TYPE_INFORMATION_CONNECT: 81,
+    VSCP_TYPE_INFORMATION_DISCONNECT: 82,
+    VSCP_TYPE_INFORMATION_RECONNECT: 83,
  
 //  CLASS1.CONTROL = 30  -  Control
     VSCP_TYPE_CONTROL_GENERAL: 0,
