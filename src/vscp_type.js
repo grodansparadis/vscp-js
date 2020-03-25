@@ -1,8 +1,8 @@
 // VSCP type definition file
 //
-// Copyright (C) 2012-2020 Ake Hedman, Grodans Paradis AB
+// Copyright © 2012-2020 Ake Hedman, Grodans Paradis AB
 // <akhe@grodansparadis.com>
-// Copyright (c) 2015-2020 Andreas Merkle
+// Copyright © 2015-2020 Andreas Merkle
 // <vscp@blue-andi.de>
 //
 // Licence:
@@ -11,7 +11,7 @@
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2012-2020 Grodans Paradis AB (Paradise of the Frog)
+// Copyright © 2012-2020 Grodans Paradis AB (Paradise of the Frog)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2020-01-02 17:51:06.185509
+                        Generated: 2020-03-25 16:54:54.688611
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -323,6 +323,8 @@ vscp.constants.types = {
     VSCP_TYPE_INFORMATION_CONNECT: 81,
     VSCP_TYPE_INFORMATION_DISCONNECT: 82,
     VSCP_TYPE_INFORMATION_RECONNECT: 83,
+    VSCP_TYPE_INFORMATION_ENTER: 84,
+    VSCP_TYPE_INFORMATION_EXIT: 85,
  
 //  CLASS1.CONTROL = 30  -  Control
     VSCP_TYPE_CONTROL_GENERAL: 0,
@@ -829,6 +831,11 @@ vscp.constants.types = {
     VSCP2_TYPE_TEXT2SPEECH_GENERAL: 0,
     VSCP2_TYPE_TEXT2SPEECH_TALK: 1,
  
+//  CLASS2.HLO = 1028  -  High Level Object
+    VSCP2_TYPE_HLO_GENERAL: 0,
+    VSCP2_TYPE_HLO_COMMAND: 1,
+    VSCP2_TYPE_HLO_RESPONSE: 2,
+ 
 //  CLASS2.CUSTOM = 1029  -  Level II Custom
     VSCP2_TYPE_CUSTOM_GENERAL: 0,
  
@@ -846,36 +853,13 @@ vscp.constants.types = {
     VSCP2_TYPE_VSCPD_LOOP: 1,
     VSCP2_TYPE_VSCPD_PAUSE: 3,
     VSCP2_TYPE_VSCPD_ACTIVATE: 4,
-    VSCP2_TYPE_VSCPD_SECOND: 5,
-    VSCP2_TYPE_VSCPD_MINUTE: 6,
-    VSCP2_TYPE_VSCPD_HOUR: 7,
-    VSCP2_TYPE_VSCPD_NOON: 8,
-    VSCP2_TYPE_VSCPD_MIDNIGHT: 9,
-    VSCP2_TYPE_VSCPD_WEEK: 11,
-    VSCP2_TYPE_VSCPD_MONTH: 12,
-    VSCP2_TYPE_VSCPD_QUARTER: 13,
-    VSCP2_TYPE_VSCPD_YEAR: 14,
-    VSCP2_TYPE_VSCPD_RANDOM_MINUTE: 15,
-    VSCP2_TYPE_VSCPD_RANDOM_HOUR: 16,
-    VSCP2_TYPE_VSCPD_RANDOM_DAY: 17,
-    VSCP2_TYPE_VSCPD_RANDOM_WEEK: 18,
-    VSCP2_TYPE_VSCPD_RANDOM_MONTH: 19,
-    VSCP2_TYPE_VSCPD_RANDOM_YEAR: 20,
-    VSCP2_TYPE_VSCPD_DUSK: 21,
-    VSCP2_TYPE_VSCPD_DAWN: 22,
-    VSCP2_TYPE_VSCPD_STARTING_UP: 23,
-    VSCP2_TYPE_VSCPD_SHUTTING_DOWN: 24,
-    VSCP2_TYPE_VSCPD_TIMER_STARTED: 25,
-    VSCP2_TYPE_VSCPD_TIMER_PAUSED: 26,
-    VSCP2_TYPE_VSCPD_TIMER_RESUMED: 27,
-    VSCP2_TYPE_VSCPD_TIMER_STOPPED: 28,
-    VSCP2_TYPE_VSCPD_TIMER_ELLAPSED: 29,
-    VSCP2_TYPE_VSCPD_NEW_CALCULATION: 30,
-    VSCP2_TYPE_VSCPD_DRV3_START: 31,
-    VSCP2_TYPE_VSCPD_DRV3_STOP: 32,
-    VSCP2_TYPE_VSCPD_DRV3_PAUSE: 33,
-    VSCP2_TYPE_VSCPD_DRV3_RESUME: 34,
-    VSCP2_TYPE_VSCPD_DRV3_RESTART: 35,
-    VSCP2_TYPE_VSCPD_DRV3_CONFIG: 36 
+    VSCP2_TYPE_VSCPD_STARTING_UP: 5,
+    VSCP2_TYPE_VSCPD_SHUTTING_DOWN: 6,
+    VSCP2_TYPE_VSCPD_DRV3_START: 7,
+    VSCP2_TYPE_VSCPD_DRV3_STOP: 8,
+    VSCP2_TYPE_VSCPD_DRV3_PAUSE: 9,
+    VSCP2_TYPE_VSCPD_DRV3_RESUME: 10,
+    VSCP2_TYPE_VSCPD_DRV3_RESTART: 11,
+    VSCP2_TYPE_VSCPD_DRV3_CONFIG: 12 
  
 };

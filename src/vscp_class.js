@@ -1,8 +1,8 @@
 // VSCP class definition file
 //
-// Copyright (C) 2012-2020 Ake Hedman, Grodans Paradis AB
+// Copyright © 2012-2020 Ake Hedman, Grodans Paradis AB
 // <akhe@grodansparadis.com>
-// Copyright (c) 2015-2020 Andreas Merkle
+// Copyright © 2015-2020 Andreas Merkle
 // <vscp@blue-andi.de>
 //
 // Licence:
@@ -11,7 +11,7 @@
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2012-2020 Grodans Paradis AB (Paradise of the Frog)
+// Copyright © 2012-2020 Grodans Paradis AB (Paradise of the Frog)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2020-01-02 17:51:05.084702
+                        Generated: 2020-03-25 16:54:53.571975
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -127,6 +127,7 @@ vscp.constants.classes = {
     VSCP_CLASS2_CONTROL: 1025,
     VSCP_CLASS2_INFORMATION: 1026,
     VSCP_CLASS2_TEXT2SPEECH: 1027,
+    VSCP_CLASS2_HLO: 1028,
     VSCP_CLASS2_CUSTOM: 1029,
     VSCP_CLASS2_DISPLAY: 1030,
     VSCP_CLASS2_MEASUREMENT_STR: 1040,
