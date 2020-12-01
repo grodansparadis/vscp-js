@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2020-10-21 22:51:10.381531
+                        Generated: 2020-12-01 12:33:04.213753
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -91,6 +91,7 @@ vscp.constants.classes = {
     VSCP_CLASS1_PHONE: 100,
     VSCP_CLASS1_DISPLAY: 102,
     VSCP_CLASS1_IR: 110,
+    VSCP_CLASS1_CONFIGURE: 120,
     VSCP_CLASS1_GNSS: 206,
     VSCP_CLASS1_WIRELESS: 212,
     VSCP_CLASS1_DIAGNOSTIC: 506,
