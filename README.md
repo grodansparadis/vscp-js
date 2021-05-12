@@ -49,8 +49,7 @@ vscpClient.connect({
     url: "ws://localhost:8884/ws1",
     userName: "admin",
     password: "secret",
-    vscpkey: "A4A86F7D7E119BA3F0CD06881E371B989B33B6D606A863B633EF529D64544F8E",
-    authdomain: "mydomain.com",
+    vscpkey: "2DBB079A38985AF00EBEEFE22F9FFA0E7F72DF06EBE44563EDF4A1073CABC7D4",
     onSuccess: function() {
         // Implement your code here ...
     },
@@ -69,8 +68,7 @@ vscpClient.connect({
     url: "ws://localhost:8884/ws1",
     userName: "admin",
     password: "secret",
-    vscpkey: "A4A86F7D7E119BA3F0CD06881E371B989B33B6D606A863B633EF529D64544F8E",
-    authdomain: "mydomain.com"
+    vscpkey: "2DBB079A38985AF00EBEEFE22F9FFA0E7F72DF06EBE44563EDF4A1073CABC7D4",
 })
 .then(function() {
     // Implement your code here ...

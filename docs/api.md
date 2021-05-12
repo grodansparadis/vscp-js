@@ -239,8 +239,6 @@ Namespace for all functionality of the VSCP provided libraries.
             * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
             * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
             * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-            * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-            * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
             * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
             * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
             * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -3500,8 +3498,6 @@ VSCP websocket api functions
         * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
         * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
         * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-        * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-        * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
         * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
         * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
         * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -3552,8 +3548,6 @@ VSCP websocket api functions
     * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
     * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
     * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-    * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-    * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
     * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
     * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
     * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -3655,18 +3649,6 @@ Password used for connection establishment
 
 ##### client.vscpkey : `string`
 Secret key used for connection establishment
-
-**Kind**: instance property of [`Client`](#vscp.ws.Client)  
-<a id="vscp_dot_ws_dot_Client_plus_authdomain"></a>
-
-##### client.authdomain : `string`
-authdomain used for connection establishment
-
-**Kind**: instance property of [`Client`](#vscp.ws.Client)  
-<a id="vscp_dot_ws_dot_Client_plus_passwordHash"></a>
-
-##### client.passwordHash : `string`
-Password hash used for connection establishment
 
 **Kind**: instance property of [`Client`](#vscp.ws.Client)  
 <a id="vscp_dot_ws_dot_Client_plus_onConnError"></a>
@@ -4395,8 +4377,6 @@ Namespace for all functionality of the VSCP provided libraries.
             * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
             * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
             * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-            * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-            * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
             * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
             * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
             * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -7656,8 +7636,6 @@ VSCP websocket api functions
         * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
         * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
         * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-        * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-        * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
         * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
         * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
         * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -7708,8 +7686,6 @@ VSCP websocket api functions
     * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
     * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
     * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-    * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-    * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
     * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
     * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
     * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -7811,18 +7787,6 @@ Password used for connection establishment
 
 ##### client.vscpkey : `string`
 Secret key used for connection establishment
-
-**Kind**: instance property of [`Client`](#vscp.ws.Client)  
-<a id="vscp_dot_ws_dot_Client_plus_authdomain"></a>
-
-##### client.authdomain : `string`
-authdomain used for connection establishment
-
-**Kind**: instance property of [`Client`](#vscp.ws.Client)  
-<a id="vscp_dot_ws_dot_Client_plus_passwordHash"></a>
-
-##### client.passwordHash : `string`
-Password hash used for connection establishment
 
 **Kind**: instance property of [`Client`](#vscp.ws.Client)  
 <a id="vscp_dot_ws_dot_Client_plus_onConnError"></a>
@@ -8551,8 +8515,6 @@ Namespace for all functionality of the VSCP provided libraries.
             * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
             * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
             * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-            * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-            * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
             * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
             * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
             * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -11812,8 +11774,6 @@ VSCP websocket api functions
         * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
         * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
         * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-        * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-        * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
         * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
         * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
         * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -11864,8 +11824,6 @@ VSCP websocket api functions
     * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
     * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
     * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-    * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-    * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
     * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
     * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
     * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -11967,18 +11925,6 @@ Password used for connection establishment
 
 ##### client.vscpkey : `string`
 Secret key used for connection establishment
-
-**Kind**: instance property of [`Client`](#vscp.ws.Client)  
-<a id="vscp_dot_ws_dot_Client_plus_authdomain"></a>
-
-##### client.authdomain : `string`
-authdomain used for connection establishment
-
-**Kind**: instance property of [`Client`](#vscp.ws.Client)  
-<a id="vscp_dot_ws_dot_Client_plus_passwordHash"></a>
-
-##### client.passwordHash : `string`
-Password hash used for connection establishment
 
 **Kind**: instance property of [`Client`](#vscp.ws.Client)  
 <a id="vscp_dot_ws_dot_Client_plus_onConnError"></a>
@@ -12707,8 +12653,6 @@ Namespace for all functionality of the VSCP provided libraries.
             * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
             * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
             * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-            * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-            * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
             * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
             * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
             * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -15968,8 +15912,6 @@ VSCP websocket api functions
         * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
         * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
         * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-        * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-        * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
         * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
         * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
         * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -16020,8 +15962,6 @@ VSCP websocket api functions
     * [.userNote](#vscp_dot_ws_dot_Client_plus_userNote) : `string`
     * [.password](#vscp_dot_ws_dot_Client_plus_password) : `string`
     * [.vscpkey](#vscp_dot_ws_dot_Client_plus_vscpkey) : `string`
-    * [.authdomain](#vscp_dot_ws_dot_Client_plus_authdomain) : `string`
-    * [.passwordHash](#vscp_dot_ws_dot_Client_plus_passwordHash) : `string`
     * [.onConnError](#vscp_dot_ws_dot_Client_plus_onConnError) : `function`
     * [.onMessage](#vscp_dot_ws_dot_Client_plus_onMessage) : `function`
     * [.onEvent](#vscp_dot_ws_dot_Client_plus_onEvent) : `Array.&lt;function()&gt;`
@@ -16123,18 +16063,6 @@ Password used for connection establishment
 
 ##### client.vscpkey : `string`
 Secret key used for connection establishment
-
-**Kind**: instance property of [`Client`](#vscp.ws.Client)  
-<a id="vscp_dot_ws_dot_Client_plus_authdomain"></a>
-
-##### client.authdomain : `string`
-authdomain used for connection establishment
-
-**Kind**: instance property of [`Client`](#vscp.ws.Client)  
-<a id="vscp_dot_ws_dot_Client_plus_passwordHash"></a>
-
-##### client.passwordHash : `string`
-Password hash used for connection establishment
 
 **Kind**: instance property of [`Client`](#vscp.ws.Client)  
 <a id="vscp_dot_ws_dot_Client_plus_onConnError"></a>
