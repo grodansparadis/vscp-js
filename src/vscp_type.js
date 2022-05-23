@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2021-04-21 07:24:41.613572
+                        Generated: 2022-05-23 16:40:01.397129
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -117,6 +117,7 @@ vscp.constants.types = {
     VSCP_TYPE_ALARM_ARM: 10,
     VSCP_TYPE_ALARM_DISARM: 11,
     VSCP_TYPE_ALARM_WATCHDOG: 12,
+    VSCP_TYPE_ALARM_RESET: 13,
  
 //  CLASS1.SECURITY = 2  -  Security
     VSCP_TYPE_SECURITY_GENERAL: 0,
@@ -914,6 +915,8 @@ vscp.constants.types = {
     VSCP2_TYPE_PROTOCOL_READ_WRITE_RESPONSE: 3,
     VSCP2_TYPE_PROTOCOL_HIGH_END_SERVER_CAPS: 20,
     VSCP2_TYPE_PROTOCOL_WHO_IS_THERE_RESPONSE: 32,
+    VSCP2_TYPE_PROTOCOL_GET_MATRIX_INFO_RESPONSE: 34,
+    VSCP2_TYPE_PROTOCOL_GET_EMBEDDED_MDF_RESPONSE: 36,
  
 //  CLASS2.CONTROL = 1025  -  Level II Control
     VSCP2_TYPE_CONTROL_GENERAL: 0,
