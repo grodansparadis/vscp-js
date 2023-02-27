@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2022-12-29 13:58:07.788468
+                        Generated: 2023-02-26 22:28:56.384678
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -151,6 +151,7 @@ vscp.constants.classes = {
     VSCP_CLASS2_HLO: 1028,
     VSCP_CLASS2_CUSTOM: 1029,
     VSCP_CLASS2_DISPLAY: 1030,
+    VSCP_CLASS2_SECURITY: 1034,
     VSCP_CLASS2_MEASUREMENT_STR: 1040,
     VSCP_CLASS2_MEASUREMENT_FLOAT: 1060,
     VSCP_CLASS2_VSCPD: 65535

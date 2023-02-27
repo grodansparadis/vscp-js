@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2022-12-29 13:58:08.739915
+                        Generated: 2023-02-26 22:28:57.315007
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -943,6 +943,10 @@ vscp.constants.types = {
  
 //  CLASS2.DISPLAY = 1030  -  Level II Display
     VSCP2_TYPE_DISPLAY_GENERAL: 0,
+ 
+//  CLASS2.SECURITY = 1034  -  Level II Security
+    VSCP2_TYPE_SECURITY_GENERAL: 0,
+    VSCP2_TYPE_SECURITY_SETKEY: 1,
  
 //  CLASS2.MEASUREMENT_STR = 1040  -  Level II Measurement string
 // Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
