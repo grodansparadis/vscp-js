@@ -39,7 +39,7 @@
             !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
                            This file is auto-generated
                 see https://github.com/grodansparadis/vscp-classes
-                        Generated: 2024-11-01 12:00:48.452198
+                        Generated: 2024-11-05 21:04:15.831990
 */
 
 /** Namespace for all functionality of the VSCP provided libraries.
@@ -919,7 +919,7 @@ vscp.constants.types = {
     VSCP2_TYPE_PROTOCOL_GET_EMBEDDED_MDF_RESPONSE: 36,
     VSCP2_TYPE_PROTOCOL_GET_EVENT_INTEREST_RESPONSE: 41,
     VSCP2_TYPE_PROTOCOL_READ_REGISTER_DIRECT: 43,
-    VSCP2_TYPE_PROTOCOL_READ_REGISTER_DIRECT: 44,
+    VSCP2_TYPE_PROTOCOL_WRITE_REGISTER_DIRECT: 44,
  
 //  CLASS2.CONTROL = 1025  -  Level II Control
     VSCP2_TYPE_CONTROL_GENERAL: 0,
